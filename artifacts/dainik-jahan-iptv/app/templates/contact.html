@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}যোগাযোগ ও প্রধান কার্যালয় — দৈনিক জাহান আইপিটিভি{% endblock %}
+
+{% block content %}
+<section class="dj-section">
+  <div class="dj-section-header">
+    <div class="dj-section-title-wrap">
+      <div class="dj-section-icon">☎️</div>
+      <div>
+        <h1 class="dj-section-title">যোগাযোগ ও নিউজডেস্ক কার্যালয়</h1>
+        <p class="dj-section-subtitle">দৈনিক জাহান কেন্দ্রীয় সম্প্রচার বিভাগ ও ব্যুরো অফিসের সাথে যোগাযোগ করুন</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px;">
+    
+    <div class="dj-card" style="padding: 28px;">
+      <h2 style="font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 16px;">
+        🏛️ প্রধান কার্যালয় (HQ)
+      </h2>
+      <p style="font-size: 15px; color: var(--dj-text-secondary); line-height: 1.8; margin-bottom: 16px;">
+        <strong>দৈনিক জাহান ভবন</strong><br>
+        ময়মনসিংহ সদর, ময়মনসিংহ - ২২০০, বাংলাদেশ।<br>
+        ফোন: +৮৮০ ৯১-৬৪৫০০, +৮৮০ ৯১-৬৪৫০১<br>
+        ইমেইল: <a href="mailto:contact@dainikjahan.com" style="color: var(--dj-red);">contact@dainikjahan.com</a>
+      </p>
+
+      <h2 style="font-size: 18px; font-weight: 800; color: #fff; margin-top: 24px; margin-bottom: 12px;">
+        🏢 ঢাকা ব্যুরো ও ডিজিটাল স্টুডিও
+      </h2>
+      <p style="font-size: 15px; color: var(--dj-text-secondary); line-height: 1.8;">
+        কাওরান বাজার / পুরানা পল্টন, ঢাকা - ১০০০, বাংলাদেশ।<br>
+        মোবাইল / হোয়াটসঅ্যাপ হটলাইন: +৮৮০ ১৭১১-০০০০০০<br>
+        সম্প্রচার ও আইপিটিভি টেকনিক্যাল ডেস্ক: <a href="mailto:iptv@dainikjahan.com" style="color: var(--dj-red);">iptv@dainikjahan.com</a>
+      </p>
+    </div>
+
+    <div class="dj-form-card" style="margin: 0; padding: 28px; width: 100%; max-width: 100%;">
+      <h2 style="font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 16px;">
+        📩 সরাসরি বার্তা বা মতামত পাঠান
+      </h2>
+      <form action="/submissions" method="GET">
+        <div class="dj-form-group">
+          <label class="dj-label">আপনার পূর্ণ নাম *</label>
+          <input type="text" class="dj-input" placeholder="আপনার নাম লিখুন" required>
+        </div>
+        <div class="dj-form-group">
+          <label class="dj-label">ইমেইল ঠিকানা *</label>
+          <input type="email" class="dj-input" placeholder="name@domain.com" required>
+        </div>
+        <div class="dj-form-group">
+          <label class="dj-label">বার্তা বা অনুসন্ধান *</label>
+          <textarea class="dj-textarea" placeholder="আপনার বক্তব্য সংক্ষেপে লিখুন..." required></textarea>
+        </div>
+        <button type="submit" class="dj-btn-primary" style="width: 100%;">
+          বার্তা প্রেরণ করুন
+        </button>
+      </form>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

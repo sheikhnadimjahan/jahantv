@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@600;700;800&amp;family=Tiro+Bangla&amp;display=swap');
+      .dj-brand-text {
+        font-family: 'Tiro Bangla', 'Hind Siliguri', 'SolaimanLipi', 'Kalpurush', 'Noto Serif Bengali', 'Noto Sans Bengali', sans-serif;
+        text-anchor: middle;
+        fill: #FFFFFF;
+      }
+      .dj-online-sub {
+        font-family: 'Hind Siliguri', 'Kalpurush', sans-serif;
+        font-size: 38px;
+        font-weight: 700;
+        letter-spacing: 2px;
+      }
+      .dj-primary-title {
+        font-size: 96px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+    </style>
+    <!-- Subtle drop shadow for depth -->
+    <filter id="djShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="4" stdDeviation="5" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Group for Logo -->
+  <g id="dainik-jahan-round-mark">
+    <!-- Red outer circle generating the right/bottom crescent -->
+    <circle cx="330" cy="300" r="268" fill="#9E1A22" />
+    
+    <!-- Dark black inner disc placed over red, offset leftwards -->
+    <circle cx="272" cy="292" r="248" fill="#0C0D10" filter="url(#djShadow)" />
+
+    <!-- Pure White Bengali Typography & Bar -->
+    <g class="dj-brand-text">
+      <!-- অনলাইন (Online) -->
+      <text x="272" y="172" class="dj-online-sub">অনলাইন</text>
+      
+      <!-- দৈনিক (Dainik) -->
+      <text x="272" y="272" class="dj-primary-title">দৈনিক</text>
+      
+      <!-- Dividing horizontal line -->
+      <rect x="138" y="296" width="268" height="7.5" rx="3.5" fill="#FFFFFF" />
+      
+      <!-- জাহান (Jahan) -->
+      <text x="272" y="394" class="dj-primary-title">জাহান</text>
+    </g>
+  </g>
+</svg>

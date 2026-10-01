@@ -1,0 +1,239 @@
+{
+  "dainik-jahan-live": [
+    {
+      "start": "06:00",
+      "end": "08:00",
+      "title_bn": "সুপ্রভাত বাংলাদেশ — প্রভাতী বুলেটিন",
+      "title_en": "Suprobhat Bangladesh — Morning Bulletin",
+      "genre": "News",
+      "genre_bn": "সংবাদ",
+      "desc": "সকালের তাজা সংবাদ, জাতীয় ও আন্তর্জাতিক সংবাদপত্রের প্রধান শিরোনাম এবং আবহাওয়া বার্তা।",
+      "host": "রাশেদ চৌধুরী",
+      "is_live": false
+    },
+    {
+      "start": "08:00",
+      "end": "09:30",
+      "title_bn": "দৃষ্টিপাত: আজকের রাজনীতি ও বিশ্লেষণ",
+      "title_en": "Drishtipat: Politics & Current Affairs",
+      "genre": "Current Affairs",
+      "genre_bn": "বিশ্লেষণ",
+      "desc": "সমসাময়িক রাজনৈতিক পরিস্থিতি ও রাষ্ট্রীয় গুরুত্বপূর্ণ ঘটনাবলীর নিরপেক্ষ বিশ্লেষণমূলক আলোচনা।",
+      "host": "ফারহানা ইয়াসমিন",
+      "is_live": false
+    },
+    {
+      "start": "09:30",
+      "end": "11:00",
+      "title_bn": "অর্থনীতি প্রতিদিন: বাজার ও ব্যবসা",
+      "title_en": "Economy Today: Markets & Trade",
+      "genre": "Business",
+      "genre_bn": "অর্থনীতি",
+      "desc": "শেয়ার বাজার, কৃষি পণ্য, দ্রব্যমূল্য ও আন্তর্জাতিক বাণিজ্যের সার্বক্ষণিক পর্যালোচনা।",
+      "host": "তানভীর আহমেদ",
+      "is_live": false
+    },
+    {
+      "start": "11:00",
+      "end": "13:00",
+      "title_bn": "দৈনিক জাহান মধ্যাহ্ন সংবাদ",
+      "title_en": "Dainik Jahan Midday News Live",
+      "genre": "News",
+      "genre_bn": "সংবাদ",
+      "desc": "দিনের প্রথম অর্ধেকের দেশ ও বিদেশের সব জরুরি ঘটনা সরাসরি ঢাকা ও আঞ্চলিক স্টুডিও থেকে।",
+      "host": "নাসরিন সুলতানা",
+      "is_live": true
+    },
+    {
+      "start": "13:00",
+      "end": "14:30",
+      "title_bn": "বাংলার মাটি ও কৃষক",
+      "title_en": "Soil & Farmers of Bengal",
+      "genre": "Agriculture",
+      "genre_bn": "কৃষি ও পরিবেশ",
+      "desc": "আধুনিক চাষাবাদ পদ্ধতি, জলবায়ু সহনশীল শস্য এবং প্রান্তিক কৃষকের সফলতার বাস্তব রূপরেখা।",
+      "host": "ড. আমিনুল ইসলাম",
+      "is_live": false
+    },
+    {
+      "start": "14:30",
+      "end": "16:00",
+      "title_bn": "ময়মনসিংহ দর্পণ: লোকসংস্কৃতি ও জনপদ",
+      "title_en": "Mymensingh Mirror: Folklore & Life",
+      "genre": "Culture",
+      "genre_bn": "সংস্কৃতি",
+      "desc": "মৈমনসিংহ গীতিকা, নকশিকাঁথা, সুতিবস্ত্র ও ব্রহ্মপুত্র তীরবর্তী জনজীবনের সাংস্কৃতিক আলেখ্য।",
+      "host": "শামীমা আক্তার",
+      "is_live": false
+    },
+    {
+      "start": "16:00",
+      "end": "17:30",
+      "title_bn": "বিশ্ববার্তা: আন্তর্জাতিক ঘটনাপ্রবাহ",
+      "title_en": "World Watch: Global Developments",
+      "genre": "International",
+      "genre_bn": "আন্তর্জাতিক",
+      "desc": "মধ্যপ্রাচ্য, জাতিসংঘ, আমেরিকা ও ইউরোপীয় ভূ-রাজনীতির সর্বশেষ অগ্রগতির সার্বিক বিবরণ।",
+      "host": "সাদিকুর রহমান",
+      "is_live": false
+    },
+    {
+      "start": "17:30",
+      "end": "19:00",
+      "title_bn": "সন্ধ্যা ৬টার প্রধান সংবাদ বুলেটিন",
+      "title_en": "Prime Evening News Bulletin",
+      "genre": "News",
+      "genre_bn": "সংবাদ",
+      "desc": "বিকেলের প্রধান প্রধান জাতীয় ঘটনা, ব্রেকিং নিউজ এবং বিশেষ ফিল্ড রিপোর্টারদের সরাসরি সম্প্রচার।",
+      "host": "ফারহানা ইয়াসমিন",
+      "is_live": false
+    },
+    {
+      "start": "19:00",
+      "end": "20:30",
+      "title_bn": "জাহান টকশো: দেশ ও সমাধান",
+      "title_en": "Jahan Talk: Country & Solutions",
+      "genre": "Debate",
+      "genre_bn": "টকশো",
+      "desc": "রাজনীতিবিদ, বুদ্ধিজীবী ও গবেষকদের সাথে সরাসরি জাতীয় স্বার্থ ও ভবিষ্যৎ নীতি নিয়ে বিতর্ক।",
+      "host": "সম্পাদকীয় প্যানেল",
+      "is_live": false
+    },
+    {
+      "start": "20:30",
+      "end": "22:00",
+      "title_bn": "দৈনিক জাহান রাত ১০টার মহাসংবাদ",
+      "title_en": "Grand 10 PM Night Bulletin",
+      "genre": "News",
+      "genre_bn": "সংবাদ",
+      "desc": "সারাদিনের সব সংবাদের পূর্ণাঙ্গ পর্যালোচনা ও অনুসন্ধানমূলক প্রতিবেদনের সচিত্র বিবরণ।",
+      "host": "রাশেদ চৌধুরী",
+      "is_live": false
+    },
+    {
+      "start": "22:00",
+      "end": "00:00",
+      "title_bn": "অনুসন্ধান জাহান: স্পেশাল ইনভেস্টিগেশন",
+      "title_en": "Anusandhan Jahan: Special Crime & Scam",
+      "genre": "Documentary",
+      "genre_bn": "অনুসন্ধান",
+      "desc": "দুর্নীতি, অর্থপাচার ও পরিবেশ ধ্বংসের বিরুদ্ধে দৈনিক জাহানের গোপনীয় অনুসন্ধান ইউনিট।",
+      "host": "স্পেশাল ইনভেস্টিগেটিভ টিম",
+      "is_live": false
+    }
+  ],
+  "btv-world": [
+    {
+      "start": "06:00",
+      "end": "08:00",
+      "title_bn": "বিটিভি প্রভাতী সংবাদ ও ধর্মীয় অনুষ্ঠান",
+      "title_en": "BTV Morning News & Spiritual Program",
+      "genre": "News",
+      "genre_bn": "সংবাদ",
+      "desc": "পবিত্র কোরআন তেলাওয়াত, জাতীয় সঙ্গীত এবং ভোরের তাজা সংবাদ।",
+      "host": "বিটিভি উপস্থাপক দল",
+      "is_live": false
+    },
+    {
+      "start": "08:00",
+      "end": "10:30",
+      "title_bn": "মাটি ও মানুষ — শাইখ সিরাজ সংকলন",
+      "title_en": "Mati O Manush — Agriculture Milestone",
+      "genre": "Agriculture",
+      "genre_bn": "কৃষি",
+      "desc": "বাংলাদেশের কৃষির বৈপ্লবিক রূপান্তর ও আধুনিক কৃষি উদ্যোক্তাদের সফলতার রূপকথা।",
+      "host": "কৃষি ডেস্ক",
+      "is_live": false
+    },
+    {
+      "start": "10:30",
+      "end": "13:00",
+      "title_bn": "বিটিভি দুপুর ২টার জাতীয় সংবাদ",
+      "title_en": "BTV National Midday News",
+      "genre": "News",
+      "genre_bn": "সংবাদ",
+      "desc": "রাষ্ট্রীয় নীতি, উন্নয়ন কর্মকাণ্ড ও দেশব্যাপী ঘটে যাওয়া প্রধান প্রধান খবর।",
+      "host": "বিটিভি নিউজ প্যানেল",
+      "is_live": true
+    },
+    {
+      "start": "13:00",
+      "end": "15:00",
+      "title_bn": "বিটিভি চিরায়ত নাটক ও সাহিত্য আড্ডা",
+      "title_en": "Classic BTV Drama & Literary Circle",
+      "genre": "Entertainment",
+      "genre_bn": "বিনোদন",
+      "desc": "হুমায়ূন আহমেদ ও প্রখ্যাত নাট্যকারদের কালজয়ী পারিবারিক নাটকের পুনঃপ্রচার।",
+      "host": "নাট্য বিভাগ",
+      "is_live": false
+    },
+    {
+      "start": "15:00",
+      "end": "18:00",
+      "title_bn": "বিটিভি বিশ্ব সংবাদ ও সমকালীন বিশ্ব",
+      "title_en": "BTV World News & Diplomacy",
+      "genre": "News",
+      "genre_bn": "আন্তর্জাতিক",
+      "desc": "বাংলাদেশের কূটনীতি, বহির্বিশ্ব সম্পর্ক ও বৈশ্বিক শান্তি প্রচেষ্টার খবর।",
+      "host": "কূটনৈতিক ডেস্ক",
+      "is_live": false
+    },
+    {
+      "start": "18:00",
+      "end": "20:00",
+      "title_bn": "বিটিভি রাত ৮টার ইংরেজি ও বাংলা সংবাদ",
+      "title_en": "BTV 8 PM Prime News (Bangla & English)",
+      "genre": "News",
+      "genre_bn": "প্রধান সংবাদ",
+      "desc": "দেশের প্রধানতম রাষ্ট্রীয় সংবাদ বুলেটিন।",
+      "host": "বিটিভি প্রধান উপস্থাপক",
+      "is_live": false
+    }
+  ],
+  "al-jazeera-english": [
+    {
+      "start": "06:00",
+      "end": "10:00",
+      "title_bn": "আল জাজিরা নিউজ আওয়ার",
+      "title_en": "Al Jazeera NewsHour Global",
+      "genre": "News",
+      "genre_bn": "আন্তর্জাতিক",
+      "desc": "Comprehensive global news coverage from Doha, London, and Washington.",
+      "host": "Global Desk",
+      "is_live": false
+    },
+    {
+      "start": "10:00",
+      "end": "14:00",
+      "title_bn": "ইনসাইড স্টোরি ও ইনভেস্টিগেশন",
+      "title_en": "Inside Story & Deep Investigations",
+      "genre": "Investigation",
+      "genre_bn": "অনুসন্ধান",
+      "desc": "Critical perspectives on world events and power dynamics.",
+      "host": "Sami Zeidan",
+      "is_live": true
+    },
+    {
+      "start": "14:00",
+      "end": "18:00",
+      "title_bn": "১০১ ইস্ট: এশিয়ার রূপরেখা",
+      "title_en": "101 East: Asia In-Depth",
+      "genre": "Documentary",
+      "genre_bn": "ডকুমেন্টারি",
+      "desc": "Weekly investigative documentary strand showcasing powerful Asian stories.",
+      "host": "Steve Chao",
+      "is_live": false
+    },
+    {
+      "start": "18:00",
+      "end": "22:00",
+      "title_bn": "পিপল অ্যান্ড পাওয়ার",
+      "title_en": "People & Power: Global Geopolitics",
+      "genre": "Documentary",
+      "genre_bn": "ডকুমেন্টারি",
+      "desc": "Investigating how power functions and its impact on human lives worldwide.",
+      "host": "Senior Producers",
+      "is_live": false
+    }
+  ]
+}

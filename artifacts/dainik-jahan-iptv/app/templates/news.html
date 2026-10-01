@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}দৈনিক জাহান ভিডিও সংবাদ ও বিশ্লেষণ — Dainik Jahan News{% endblock %}
+
+{% block content %}
+<section class="dj-section">
+  <div class="dj-section-header">
+    <div class="dj-section-title-wrap">
+      <div class="dj-section-icon" style="background: rgba(16, 185, 129, 0.2); color: var(--dj-green);">📰</div>
+      <div>
+        <h1 class="dj-section-title">দৈনিক জাহান সংবাদ ও বিশেষ প্রতিবেদন</h1>
+        <p class="dj-section-subtitle">সত্য ও ন্যায়ের পক্ষে আপসহীন — জাতীয়, আঞ্চলিক ও আন্তর্জাতিক তথ্যপ্রবাহ</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+    
+    <!-- Main News Feed -->
+    <div>
+      {% if selected_news_category %}
+      <div class="dj-card" role="status" style="margin-bottom: 20px; padding: 14px 18px;">
+        <span>বিভাগ: <strong>{{ selected_news_category }}</strong></span>
+        <a href="/news" style="margin-left: 12px; color: var(--dj-gold);">সব সংবাদ দেখুন</a>
+      </div>
+      {% endif %}
+      {% for article in news_articles %}
+      <article id="{{ article.id }}" class="dj-card" style="margin-bottom: 24px; padding: 24px;">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span class="dj-badge dj-badge-category">{{ article.category }}</span>
+            {% if article.breaking %}
+            <span class="dj-badge" style="background: var(--dj-red); color: #fff;">ব্রেকিং নিউজ</span>
+            {% endif %}
+          </div>
+          <span style="font-size: 12px; color: var(--dj-text-muted);">{{ article.timestamp }}</span>
+        </div>
+
+        <h2 style="font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 12px; line-height: 1.4;">
+          {{ article.title }}
+        </h2>
+
+        <div style="font-size: 13px; color: var(--dj-gold); margin-bottom: 14px; font-weight: 600;">
+          প্রতিবেদক: {{ article.author }}
+        </div>
+
+        <p style="font-size: 15px; color: var(--dj-text-secondary); line-height: 1.8; margin-bottom: 18px;">
+          {{ article.content }}
+        </p>
+
+        {% if article.has_video %}
+        <div style="background: #0B0E14; border: 1px solid var(--dj-border); border-radius: var(--dj-radius-md); padding: 14px; display: flex; align-items: center; justify-content: space-between; gap: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 40px; height: 40px; background: var(--dj-red); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff;">▶</div>
+            <div>
+              <div style="font-weight: 700; color: #fff; font-size: 14px;">{{ article.video_title }}</div>
+              <div style="font-size: 12px; color: var(--dj-text-muted);">দৈনিক জাহান ডিজিটাল স্টুডিও • HD বুলেটিন</div>
+            </div>
+          </div>
+          <a href="/?video={{ article.id }}#player-section" class="dj-btn-primary" style="font-size: 12px; padding: 8px 16px;">
+            ভিডিও দেখুন
+          </a>
+        </div>
+        {% endif %}
+
+      </article>
+      {% else %}
+      <div class="dj-card" role="status" style="padding: 24px;">
+        এই বিভাগে এখনো কোনো সংবাদ প্রকাশিত হয়নি।
+        <a href="/news" style="color: var(--dj-gold);">সব সংবাদ দেখুন</a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- News Sidebar -->
+    <aside>
+      <div class="dj-card" style="margin-bottom: 24px;">
+        <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 14px; border-bottom: 1px solid var(--dj-border); padding-bottom: 8px;">
+          সংবাদ বিভাগ সমূহ
+        </h3>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <a href="/news" class="dj-side-item {% if not selected_news_category %}active{% endif %}">সব সংবাদ</a>
+          {% for category in news_categories %}
+          <a href="/news?category={{ category | urlencode }}" class="dj-side-item {% if selected_news_category == category %}active{% endif %}">{{ category }}</a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="dj-card">
+        <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 10px;">
+          সংবাদ পাঠান বা তথ্য দিন
+        </h3>
+        <p style="font-size: 13px; color: var(--dj-text-muted); line-height: 1.5; margin-bottom: 14px;">
+          আপনার এলাকার যেকোনো অনিয়ম, দুর্ভোগ, সফলতা বা ব্রেকিং সংবাদের ভিডিও ও ছবি পাঠাতে আমাদের নাগরিক সাংবাদিকতা পোর্টালে যোগাযোগ করুন।
+        </p>
+        <a href="/submissions?type=correction" class="dj-btn-primary" style="width: 100%; text-align: center;">
+          তথ্য বা সংবাদ জমা দিন
+        </a>
+      </div>
+    </aside>
+
+  </div>
+</section>
+{% endblock %}

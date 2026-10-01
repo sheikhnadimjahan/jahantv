@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}চ্যানেল ডিসকভারি ও ফিল্টার — দৈনিক জাহান আইপিটিভি{% endblock %}
+
+{% block content %}
+<section class="dj-section">
+  <div class="dj-section-header">
+    <div class="dj-section-title-wrap">
+      <div class="dj-section-icon">🔍</div>
+      <div>
+        <h1 class="dj-section-title">চ্যানেল ডিসকভারি ও ফিল্টার ব্যবস্থা</h1>
+        <p class="dj-section-subtitle">দেশ, ভাষা, অঞ্চল, ক্যাটাগরি এবং রেজোলিউশন অনুযায়ী সকল চ্যানেল অনুসন্ধান করুন</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multi Filter Panel -->
+  <div class="dj-card" style="margin-bottom: 28px; padding: 20px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+      
+      <div>
+        <label class="dj-label">ক্যাটাগরি (Category)</label>
+        <select id="filterCategory" class="dj-select">
+          <option value="all">সকল ক্যাটাগরি</option>
+          <option value="News">সংবাদ (News)</option>
+          <option value="Culture">সংস্কৃতি (Culture)</option>
+          <option value="Education">শিক্ষা ও বিজ্ঞান (Education)</option>
+          <option value="Documentary">প্রামাণ্যচিত্র (Documentary)</option>
+          <option value="Sports">খেলাধুলা (Sports)</option>
+          <option value="Kids">শিশু-কিশোর (Kids)</option>
+          <option value="Community">কমিউনিটি (Community)</option>
+          <option value="Religious">ধর্মীয় (Religious)</option>
+          <option value="Music">সঙ্গীত (Music)</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="dj-label">দেশ / উৎস (Country)</label>
+        <select id="filterCountry" class="dj-select">
+          <option value="all">সকল দেশ</option>
+          <option value="Bangladesh">বাংলাদেশ (Bangladesh)</option>
+          <option value="International">আন্তর্জাতিক (International)</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="dj-label">ভাষা (Language)</label>
+        <select id="filterLanguage" class="dj-select">
+          <option value="all">সকল ভাষা</option>
+          <option value="Bengali">বাংলা (Bengali)</option>
+          <option value="English">ইংরেজি (English)</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="dj-label">রেজোলিউশন (Resolution)</label>
+        <select id="filterRes" class="dj-select">
+          <option value="all">সকল রেজোলিউশন</option>
+          <option value="1080p">1080p Full HD</option>
+          <option value="720p">720p HD</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Results Count -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+    <div style="font-weight: 700; color: #fff;">
+      মোট প্রদর্শিত চ্যানেল: <span id="resultsCount" style="color: var(--dj-gold);">{{ channels|length }}</span>টি
+    </div>
+    <div style="font-size: 13px; color: var(--dj-text-muted);">
+      * সকল সক্রিয় চ্যানেল লাইভ টেস্টেড ও ভেরিফাইড
+    </div>
+  </div>
+
+  <!-- Channel Grid -->
+  <div class="dj-channel-grid">
+    {% for ch in channels %}
+    <article class="dj-card filterable-channel"
+             data-category="{{ ch.category }}"
+             data-country="{{ ch.country }}"
+             data-language="{{ ch.language }}"
+             data-resolution="{{ ch.resolution }}"
+             data-channel-json='{{ ch | tojson }}'>
+      
+      <div class="dj-card-top">
+        <div class="dj-card-logo">
+          {% if ch.is_bangladesh %}
+          <img src="/static/images/logo.svg" alt="{{ ch.name }}">
+          {% else %}
+          <span>{{ ch.callsign }}</span>
+          {% endif %}
+        </div>
+        <span class="dj-card-status-badge dj-card-status-live">সরাসরি সম্প্রচার</span>
+      </div>
+
+      <div class="dj-card-body">
+        <h3 class="dj-card-title">{{ ch.name }}</h3>
+        <div class="dj-card-meta">
+          <span class="dj-badge dj-badge-category">{{ ch.category_bn }}</span>
+          <span class="dj-badge dj-badge-res">{{ ch.resolution }}</span>
+          <span class="dj-badge dj-badge-auth">{{ ch.language_bn }}</span>
+        </div>
+        <p class="dj-card-desc">{{ ch.description_bn }}</p>
+        <div style="margin-top: 8px; font-size: 11px; color: var(--dj-text-muted);">
+          অঞ্চল: {{ ch.region_bn }} | কলসাইন: {{ ch.callsign }}
+        </div>
+      </div>
+
+      <div class="dj-card-footer">
+        <a href="/?channel={{ ch.id }}#player-section" class="dj-card-play-btn">
+          ▶ চালু করুন
+        </a>
+        <div class="dj-card-actions">
+          <button class="dj-icon-btn" data-fav-id="{{ ch.id }}" data-fav-title="{{ ch.name }}">
+            🤍
+          </button>
+        </div>
+      </div>
+
+    </article>
+    {% endfor %}
+  </div>
+
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const fCat = document.getElementById('filterCategory');
+    const fCountry = document.getElementById('filterCountry');
+    const fLang = document.getElementById('filterLanguage');
+    const fRes = document.getElementById('filterRes');
+    const cards = document.querySelectorAll('.filterable-channel');
+    const countEl = document.getElementById('resultsCount');
+
+    function applyFilters() {
+      let visible = 0;
+      const cat = fCat.value;
+      const country = fCountry.value;
+      const lang = fLang.value;
+      const res = fRes.value;
+
+      cards.forEach(card => {
+        const cCat = card.getAttribute('data-category');
+        const cCountry = card.getAttribute('data-country');
+        const cLang = card.getAttribute('data-language');
+        const cRes = card.getAttribute('data-resolution');
+
+        const mCat = (cat === 'all' || cCat === cat);
+        const mCountry = (country === 'all' || cCountry.includes(country));
+        const mLang = (lang === 'all' || cLang === lang);
+        const mRes = (res === 'all' || cRes.includes(res));
+
+        if (mCat && mCountry && mLang && mRes) {
+          card.style.display = 'flex';
+          visible++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      if (countEl) countEl.textContent = visible;
+    }
+
+    [fCat, fCountry, fLang, fRes].forEach(el => el.addEventListener('change', applyFilters));
+  });
+</script>
+{% endblock %}

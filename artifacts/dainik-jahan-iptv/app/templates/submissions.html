@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}প্রস্তাবনা, প্রামাণ্যচিত্র ও সম্প্রচার যোগাযোগ — দৈনিক জাহান আইপিটিভি{% endblock %}
+
+{% block content %}
+<section class="dj-section">
+  <div class="dj-section-header">
+    <div class="dj-section-title-wrap">
+      <div class="dj-section-icon">✍️</div>
+      <div>
+        <h1 class="dj-section-title">পাবলিক সাবমিশন ও সম্প্রচার পোর্টাল</h1>
+        <p class="dj-section-subtitle">চ্যানেল প্রস্তাবনা, অনুষ্ঠান ভাবনা, প্রামাণ্যচিত্র জমা, তথ্য সংশোধনী বা অংশীদারিত্বের জন্য যোগাযোগ করুন</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Restricted Content Warning Banner -->
+  <div style="background: rgba(158, 26, 34, 0.15); border: 1px solid rgba(158, 26, 34, 0.4); border-radius: var(--dj-radius-md); padding: 18px 24px; margin-bottom: 28px;">
+    <h3 style="color: #FF5A65; font-size: 15px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+      ⚠️ কঠোরভাবে নিষিদ্ধ কনটেন্ট সংক্রান্ত সতর্কতা (Restricted Content Policy)
+    </h3>
+    <p style="font-size: 13px; color: var(--dj-text-secondary); line-height: 1.6;">
+      দৈনিক জাহান আইপিটিভি প্ল্যাটফর্মে যেকোনো ধরনের কপিরাইট লঙ্ঘন, পাইরেসি, অননুমোদিত রি-ট্রান্সমিশন, প্রতারণা, স্ক্যাম, ফিশিং, ম্যালওয়্যার, সন্ত্রাসবাদী বা উগ্রপন্থী প্রচার, সহিংসতায় প্ররোচনা, শিশু নির্যাতন/শোষণ, অবমাননাকর বা গোপনীয় সামগ্রী প্রকাশ, হুমকি, ডক্সিং এবং দেশের প্রচলিত আইন দ্বারা নিষিদ্ধ যেকোনো বিষয়বস্তু <strong>কঠোরভাবে নিষিদ্ধ</strong>। লঙ্ঘনকারীদের বিরুদ্ধে তাৎক্ষণিক আইনি ব্যবস্থা গ্রহণ করা হবে।
+    </p>
+  </div>
+
+  <div class="dj-form-card">
+    <form id="submissionForm">
+      
+      <div class="dj-form-group">
+        <label class="dj-label">আবেদনের ধরন (Submission Type) *</label>
+        <select id="subType" class="dj-select" required>
+          <option value="channel_suggestion">চ্যানেল অন্তর্ভুক্তির প্রস্তাবনা (Channel Suggestion)</option>
+          <option value="programme_idea">অনুষ্ঠান বা সম্প্রচার ভাবনা (Programme Idea)</option>
+          <option value="documentary_submission">প্রামাণ্যচিত্র জমা (Documentary Submission)</option>
+          <option value="factcheck_correction">সংবাদ সংশোধনী বা তথ্য যাচাই (Correction / Fact-Check)</option>
+          <option value="viewer_feedback">সাধারণ মতামত ও পরামর্শ (Viewer Feedback)</option>
+          <option value="partnership_proposal">সম্প্রচার অংশীদারিত্ব প্রস্তাব (Partnership Proposal)</option>
+        </select>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="dj-form-group">
+          <label class="dj-label">আপনার পূর্ণ নাম (Full Name) *</label>
+          <input type="text" id="subName" class="dj-input" placeholder="উদাঃ মোসাদ্দেক হোসেন" required>
+        </div>
+        <div class="dj-form-group">
+          <label class="dj-label">ইমেইল ঠিকানা (Email) *</label>
+          <input type="email" id="subEmail" class="dj-input" placeholder="name@example.com" required>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="dj-form-group">
+          <label class="dj-label">মোবাইল / হোয়াটসঅ্যাপ নম্বর (Phone)</label>
+          <input type="tel" id="subPhone" class="dj-input" placeholder="+৮৮০ ১৭১২-৩৪৫৬৭৮">
+        </div>
+        <div class="dj-form-group">
+          <label class="dj-label">প্রতিষ্ঠান বা সংস্থার নাম (Organization - Optional)</label>
+          <input type="text" id="subOrg" class="dj-input" placeholder="উদাঃ ময়মনসিংহ লোকঐতিহ্য পরিষদ">
+        </div>
+      </div>
+
+      <div class="dj-form-group">
+        <label class="dj-label">প্রস্তাবনা বা বিষয়ের শিরোনাম (Title) *</label>
+        <input type="text" id="subTitle" class="dj-input" placeholder="সংক্ষেপে আপনার বিষয়ের মূল শিরোনাম লিখুন" required>
+      </div>
+
+      <div class="dj-form-group">
+        <label class="dj-label">অনুমোদিত স্ট্রিম বা সোর্স ইউআরএল (Stream/Media URL - If applicable)</label>
+        <input type="url" id="subUrl" class="dj-input" placeholder="https://your-station.org/live.m3u8 বা অফিশিয়াল সাইট">
+      </div>
+
+      <div class="dj-form-group">
+        <label class="dj-label">বিস্তারিত বিবরণ ও প্রস্তাবনা (Details) *</label>
+        <textarea id="subDetails" class="dj-textarea" placeholder="আপনার চ্যানেল, প্রামাণ্যচিত্র বা অনুষ্ঠান সংক্রান্ত বিস্তারিত বিবরণ এখানে প্রদান করুন..." required></textarea>
+      </div>
+
+      <div class="dj-checkbox-wrap">
+        <input type="checkbox" id="subTerms" required>
+        <label for="subTerms">
+          আমি নিশ্চিত করছি যে প্রস্তাবিত কনটেন্ট বা তথ্যের আইনগত বৈধ অধিকার আমার/আমাদের রয়েছে। এটি কোনো কপিরাইট, পাইরেসি বা বাংলাদেশের প্রচলিত আইন লঙ্ঘন করে না এবং আমি দৈনিক জাহান আইপিটিভির সম্প্রচার নীতিমালা মেনে চলতে সম্মত।
+        </label>
+      </div>
+
+      <button type="submit" class="dj-btn-primary" style="width: 100%;">
+        📩 আবেদনটি জমা দিন (Submit Application)
+      </button>
+
+    </form>
+
+    <div id="subErrorBox" role="alert" style="display: none; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.55); border-radius: var(--dj-radius-md); padding: 14px 18px; margin-top: 18px; color: #ffd5d7;"></div>
+    <div id="subSuccessBox" style="display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid #10B981; border-radius: var(--dj-radius-md); padding: 20px; margin-top: 24px; text-align: center;">
+      <h3 style="color: #10B981; margin-bottom: 8px;">✅ আপনার আবেদনটি সফলভাবে গৃহীত হয়েছে!</h3>
+      <p style="font-size: 14px; color: #fff; margin-bottom: 8px;">
+        আপনার ট্র্যাকিং রেফারেন্স আইডি: <strong id="trackingRef" style="color: var(--dj-gold); font-family: var(--dj-font-mono);">DJ-202609-000000</strong>
+      </p>
+      <p style="font-size: 13px; color: var(--dj-text-muted);">
+        দৈনিক জাহান সম্প্রচার ও সম্পাদনা পরিষদ আপনার প্রস্তাবনা পর্যালোচনা করে পরবর্তী ৪৮ ঘণ্টার মধ্যে ইমেইলে যোগাযোগ করবে।
+      </p>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Read query param if specified
+    const urlParams = new URLSearchParams(window.location.search);
+    const typeParam = urlParams.get('type');
+    if (typeParam) {
+      const select = document.getElementById('subType');
+      if (select) {
+        for (let opt of select.options) {
+          if (opt.value.includes(typeParam)) {
+            opt.selected = true;
+            break;
+          }
+        }
+      }
+    }
+
+    const form = document.getElementById('submissionForm');
+    const errorBox = document.getElementById('subErrorBox');
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBox.style.display = 'none';
+      submitButton.disabled = true;
+      submitButton.textContent = 'জমা হচ্ছে...';
+      
+      const payload = {
+        type: document.getElementById('subType').value,
+        name: document.getElementById('subName').value,
+        email: document.getElementById('subEmail').value,
+        phone: document.getElementById('subPhone').value,
+        organization: document.getElementById('subOrg').value,
+        title: document.getElementById('subTitle').value,
+        details: document.getElementById('subDetails').value,
+        source_url: document.getElementById('subUrl').value
+      };
+
+      try {
+        const res = await fetch('/iptv-api/submissions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok || data.status !== 'success') {
+          const detail = Array.isArray(data.detail) ? 'ফর্মের তথ্যগুলো যাচাই করে আবার চেষ্টা করুন।' : data.detail;
+          throw new Error(data.message || detail || 'আবেদন জমা দেওয়া যায়নি।');
+        }
+        form.style.display = 'none';
+        document.getElementById('trackingRef').textContent = data.tracking_id;
+        document.getElementById('subSuccessBox').style.display = 'block';
+        window.djShowToast('আবেদন সফলভাবে সাবমিট হয়েছে!');
+      } catch (err) {
+        console.error('Submission error:', err);
+        errorBox.textContent = `${err.message || 'আবেদন জমা দেওয়া যায়নি।'} অনুগ্রহ করে আবার চেষ্টা করুন।`;
+        errorBox.style.display = 'block';
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+      }
+    });
+  });
+</script>
+{% endblock %}

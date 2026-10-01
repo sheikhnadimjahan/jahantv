@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block title %}আমার টিভি — প্রিয় চ্যানেল ও ইতিহাস | দৈনিক জাহান আইপিটিভি{% endblock %}
+
+{% block content %}
+<section class="dj-section">
+  <div class="dj-section-header">
+    <div class="dj-section-title-wrap">
+      <div class="dj-section-icon" style="background: rgba(239, 68, 68, 0.2); color: #EF4444;">❤️</div>
+      <div>
+        <h1 class="dj-section-title">আমার টিভি (ব্যক্তিগত সংগ্রহ ও ইতিহাস)</h1>
+        <p class="dj-section-subtitle">আপনার সংরক্ষিত প্রিয় চ্যানেল, পরে দেখার তালিকা এবং সম্প্রতি দেখা অনুষ্ঠানের ইতিহাস</p>
+      </div>
+    </div>
+    <button class="dj-ctrl-btn" onclick="clearAllHistory()" style="color: #EF4444; border-color: rgba(239, 68, 68, 0.4);">
+      🗑️ দেখার ইতিহাস মুছুন
+    </button>
+  </div>
+
+  <!-- Tab buttons -->
+  <div class="dj-filter-bar">
+    <button class="dj-chip active" id="tabFav" onclick="switchUserTab('fav')">❤️ প্রিয় চ্যানেল সমূহ (<span id="favCount">0</span>)</button>
+    <button class="dj-chip" id="tabWatch" onclick="switchUserTab('watch')">🔖 ওয়াচলিস্ট (<span id="watchCount">0</span>)</button>
+    <button class="dj-chip" id="tabHist" onclick="switchUserTab('hist')">🕒 সম্প্রতি দেখা ইতিহাস (<span id="histCount">0</span>)</button>
+  </div>
+
+  <!-- Dynamic Content Container -->
+  <div id="userGrid" class="dj-channel-grid">
+    <!-- Populated by JavaScript -->
+  </div>
+
+  <div id="emptyNotice" style="display: none; background: var(--dj-surface); border: 1px dashed var(--dj-border); border-radius: var(--dj-radius-lg); padding: 50px 20px; text-align: center;">
+    <div style="font-size: 40px; margin-bottom: 12px;">📺</div>
+    <h3 style="color: #fff; font-size: 18px; margin-bottom: 8px;">এখনো কোনো আইটেম সংরক্ষিত নেই</h3>
+    <p style="color: var(--dj-text-muted); font-size: 14px; margin-bottom: 20px;">
+      লাইভ টিভি বা চ্যানেল কার্ডের হার্ট (🤍) বা বুকমার্ক (🔖) আইকনে ক্লিক করে যেকোনো চ্যানেল সংরক্ষণ করুন।
+    </p>
+    <a href="/" class="dj-btn-primary">লাইভ চ্যানেল ব্রাউজ করুন</a>
+  </div>
+
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  let currentTab = 'fav';
+  const allChannels = {{ channels | tojson }};
+  const allDocumentaries = {{ documentaries | tojson }};
+  const allNews = {{ news_articles | tojson }};
+
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[char]);
+  }
+
+  function updateCounts() {
+    const fCount = window.DainikJahanUser.favorites.length;
+    const wCount = window.DainikJahanUser.watchlist.length;
+    const hCount = window.DainikJahanUser.history.length;
+    document.getElementById('favCount').textContent = fCount;
+    document.getElementById('watchCount').textContent = wCount;
+    document.getElementById('histCount').textContent = hCount;
+  }
+
+  function switchUserTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.dj-filter-bar .dj-chip').forEach(c => c.classList.remove('active'));
+    if (tab === 'fav') document.getElementById('tabFav').classList.add('active');
+    if (tab === 'watch') document.getElementById('tabWatch').classList.add('active');
+    if (tab === 'hist') document.getElementById('tabHist').classList.add('active');
+    renderUserGrid();
+  }
+
+  function renderUserGrid() {
+    const grid = document.getElementById('userGrid');
+    const emptyNotice = document.getElementById('emptyNotice');
+    grid.innerHTML = '';
+    updateCounts();
+
+    let items = [];
+    if (currentTab === 'fav') items = window.DainikJahanUser.favorites;
+    if (currentTab === 'watch') items = window.DainikJahanUser.watchlist;
+    if (currentTab === 'hist') items = window.DainikJahanUser.history;
+
+    if (items.length === 0) {
+      grid.style.display = 'none';
+      emptyNotice.style.display = 'block';
+      return;
+    }
+
+    grid.style.display = 'grid';
+    emptyNotice.style.display = 'none';
+
+    items.forEach(item => {
+      const channel = allChannels.find(c => c.id === item.id);
+      const documentary = allDocumentaries.find(d => d.id === item.id);
+      const article = allNews.find(n => n.id === item.id);
+      const media = channel || documentary || article || {};
+      const title = media.name || media.title_bn || media.video_title || item.title || 'সংরক্ষিত মিডিয়া';
+      const category = media.category_bn || media.category || (documentary ? 'প্রামাণ্যচিত্র' : 'সাধারণ');
+      const resolution = media.resolution || 'HD';
+      const description = media.description_bn || media.synopsis_bn || media.summary || 'সংরক্ষিত মিডিয়া';
+      const encodedId = encodeURIComponent(item.id);
+      const playUrl = item.type === 'vod'
+        ? `/?doc=${encodedId}#player-section`
+        : item.type === 'news'
+          ? `/?video=${encodedId}#player-section`
+          : `/?channel=${encodedId}#player-section`;
+      const statusLabel = currentTab === 'hist' ? 'সম্প্রতি দেখা' : currentTab === 'watch' ? 'পরে দেখুন' : 'সংরক্ষিত';
+
+      const card = document.createElement('article');
+      card.className = 'dj-card';
+      card.innerHTML = `
+        <div class="dj-card-top">
+          <div class="dj-card-logo">
+            <img src="/static/images/logo.svg" alt="${escapeHtml(title)}">
+          </div>
+          <span class="dj-card-status-badge">${statusLabel}</span>
+        </div>
+        <div class="dj-card-body">
+          <h3 class="dj-card-title">${escapeHtml(title)}</h3>
+          <div class="dj-card-meta">
+            <span class="dj-badge dj-badge-category">${escapeHtml(category)}</span>
+            <span class="dj-badge dj-badge-res">${escapeHtml(resolution)}</span>
+          </div>
+          <p class="dj-card-desc">${escapeHtml(description)}</p>
+        </div>
+        <div class="dj-card-footer">
+          <a href="${playUrl}" class="dj-card-play-btn">
+            ▶ চালান
+          </a>
+          <button type="button" class="dj-icon-btn active" data-remove-item title="তালিকা থেকে সরান" aria-label="তালিকা থেকে সরান">
+            🗑️
+          </button>
+        </div>
+      `;
+      card.querySelector('[data-remove-item]').addEventListener('click', () => removeItem(item.type, item.id));
+      grid.appendChild(card);
+    });
+  }
+
+  function removeItem(type, id) {
+    if (currentTab === 'fav') {
+      window.DainikJahanUser.toggleFavorite(type, id, '');
+    } else if (currentTab === 'watch') {
+      window.DainikJahanUser.toggleWatchlist(type, id, '');
+    } else if (currentTab === 'hist') {
+      window.DainikJahanUser.history = window.DainikJahanUser.history.filter(h => !(h.id === id && h.type === type));
+      window.DainikJahanUser.save(DJ_STORAGE_KEYS.HISTORY, window.DainikJahanUser.history);
+    }
+    renderUserGrid();
+  }
+
+  function clearAllHistory() {
+    if (!window.confirm('সম্প্রতি দেখা সব ইতিহাস মুছে যাবে। চালিয়ে যাবেন?')) return;
+    window.DainikJahanUser.clearHistory();
+    renderUserGrid();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderUserGrid();
+  });
+</script>
+{% endblock %}

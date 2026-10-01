@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+
+{% block title %}দৈনিক জাহান আইপিটিভি — লাইভ টেলিভিশন, সংবাদ ও প্রামাণ্যচিত্র{% endblock %}
+
+{% block content %}
+
+<!-- 1. LIVE TV PLAYER THEATER SECTION -->
+<section id="player-section" class="dj-player-theater" aria-label="লাইভ ব্রডকাস্ট প্লেয়ার">
+  
+  <div class="dj-player-viewport">
+    
+    <!-- Status Badge (Live / Degraded / Fallback) -->
+    <div id="djPlayerStatusBadge" class="dj-player-status-badge dj-status-live">
+      সরাসরি সম্প্রচারিত (Live)
+    </div>
+
+    <!-- Official Dainik Jahan Watermark -->
+    <div class="dj-player-watermark">
+      <img src="/static/images/logo.svg" alt="দৈনিক জাহান" width="22" height="22">
+      <span>দৈনিক জাহান আইপিটিভি</span>
+    </div>
+
+    <!-- Video Canvas Wrapper -->
+    <div class="dj-video-wrapper">
+      <video id="djVideoElement" class="dj-video-element" playsinline autoplay controlslist="nodownload">
+        <source src="{{ default_channel.primary_source }}" type="video/mp4">
+        আপনার ব্রাউজারটি এইচটিএমএল৫ ভিডিও সমর্থন করে না।
+      </video>
+      <iframe id="djIframeElement" class="dj-iframe-element" style="display: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+    <!-- Diagnostics HUD -->
+    <div id="djDiagnosticsHud" class="dj-diagnostics-box">
+      <div class="dj-diag-item">প্রোটোকল: <span id="hudProtocol">HLS / TLS Edge</span></div>
+      <div class="dj-diag-item">রিলে নোড: <span id="hudNode">{{ default_channel.federation_node }}</span></div>
+      <div class="dj-diag-item">রেজোলিউশন: <span id="hudRes">{{ default_channel.resolution }}</span></div>
+      <div class="dj-diag-item">লেটেন্সি: <span id="hudLatency">1.2s (Ultra Low)</span></div>
+      <div class="dj-diag-item">বিটরেট: <span id="hudBitrate">{{ default_channel.bitrate }}</span></div>
+      <div class="dj-diag-item">অডিও চ্যানেল: <span id="hudAudio">Stereo AAC 48kHz</span></div>
+      <div class="dj-diag-item">সিগন্যাল হেলথ: <span style="color: #10B981;">১০০% অপটিমাল</span></div>
+      <div class="dj-diag-item">কপিরাইট স্ট্যাটাস: <span style="color: #3B82F6;">অনুমোদিত সিগন্যাল</span></div>
+    </div>
+
+    <!-- Controls Bar -->
+    <div class="dj-player-controls-bar">
+      <div class="dj-ctrl-group">
+        <button id="djBtnPlayPause" class="dj-ctrl-btn" title="চালু / বিরতি">
+          <span>⏸ বিরতি</span>
+        </button>
+        <button id="djBtnVolume" class="dj-ctrl-btn" title="শব্দ নিয়ন্ত্রণ">
+          <span>🔊 শব্দ চালু</span>
+        </button>
+        <button id="djBtnFallback" class="dj-ctrl-btn" title="সিগন্যাল সমস্যা হলে ব্যাকআপ স্ট্রিম চালান">
+          <span>🔄 ব্যাকআপ স্ট্রিম</span>
+        </button>
+      </div>
+
+      <div class="dj-ctrl-group">
+        <button id="djBtnDiag" class="dj-ctrl-btn" title="স্ট্রিম ডায়াগনস্টিকস">
+          <span>📊 ডায়াগনস্টিকস</span>
+        </button>
+        <button id="djBtnPip" class="dj-ctrl-btn" title="পিকচার ইন পিকচার">
+          <span>🔲 পিআইপি</span>
+        </button>
+        <button id="djBtnTheater" class="dj-ctrl-btn" title="থিয়েটার ভিউ">
+          <span>🖥️ থিয়েটার</span>
+        </button>
+        <button id="djBtnFullscreen" class="dj-ctrl-btn" title="ফুলস্ক্রিন">
+          <span>⛶ ফুলস্ক্রিন</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Current Program / Channel Details -->
+    <div class="dj-player-meta">
+      <div class="dj-meta-header">
+        <div>
+          <h1 id="djMetaTitle" class="dj-meta-title">{{ default_channel.name }}</h1>
+          <div class="dj-meta-badges">
+            <span id="djMetaCategory" class="dj-badge dj-badge-category">{{ default_channel.category_bn }}</span>
+            <span id="djMetaAuth" class="dj-badge dj-badge-auth">{{ default_channel.authorized_by }}</span>
+            <span id="djMetaRes" class="dj-badge dj-badge-res">{{ default_channel.resolution }}</span>
+          </div>
+        </div>
+        <button id="djMetaFavBtn" class="dj-ctrl-btn" style="border-color: var(--dj-red); color: #FF5A65;">
+          🤍 প্রিয় চ্যানেলে যোগ করুন
+        </button>
+      </div>
+      <p id="djMetaDesc" class="dj-meta-desc">
+        {{ default_channel.description_bn }}
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Player Sidebar (Channel Quick Switcher) -->
+  <aside class="dj-player-sidebar">
+    <div class="dj-sidebar-header">
+      <span>📡 লাইভ চ্যানেল নির্বাচন</span>
+      <span style="font-size: 11px; color: var(--dj-text-muted);">{{ channels|length }}টি চ্যানেল</span>
+    </div>
+    <div class="dj-sidebar-list">
+      {% for ch in channels %}
+      <div class="dj-side-item {% if loop.first %}active{% endif %}" data-channel-json='{{ ch | tojson }}'>
+        <div class="dj-side-item-logo">
+          {% if ch.is_bangladesh %}
+          <img src="/static/images/logo.svg" alt="{{ ch.name }}">
+          {% else %}
+          <span>{{ ch.callsign }}</span>
+          {% endif %}
+        </div>
+        <div class="dj-side-item-info">
+          <div class="dj-side-item-title">{{ ch.name }}</div>
+          <div class="dj-side-item-meta">
+            {{ ch.category_bn }} • {{ ch.resolution }}
+          </div>
+        </div>
+        <span class="pulse-dot" style="margin-left: auto;"></span>
+      </div>
+      {% endfor %}
+    </div>
+  </aside>
+
+</section>
+
+<!-- 2. FILTER CHIPS BAR -->
+<section class="dj-section" style="margin-bottom: 24px;">
+  <div style="display: flex; align-items: end; gap: 14px; flex-wrap: wrap; margin-bottom: 14px;">
+    <div style="flex: 1 1 280px; max-width: 440px;">
+      <label class="dj-label" for="djGlobalSearch">চ্যানেল ও অনুষ্ঠান খুঁজুন</label>
+      <input id="djGlobalSearch" type="search" class="dj-input" placeholder="নাম, বিভাগ বা বিষয় লিখুন">
+    </div>
+    <span id="djSearchCount" role="status" aria-live="polite" style="font-size: 13px; color: var(--dj-text-muted);"></span>
+  </div>
+  <div class="dj-filter-bar" id="channelFilters">
+    <button class="dj-chip active" data-filter="all">সকল চ্যানেল (All)</button>
+    <button class="dj-chip" data-filter="bangladesh">🇧🇩 বাংলাদেশ কভারেজ</button>
+    <button class="dj-chip" data-filter="international">🌐 আন্তর্জাতিক চ্যানেল</button>
+    <button class="dj-chip" data-filter="news">সংবাদ (News)</button>
+    <button class="dj-chip" data-filter="culture">সংস্কৃতি ও ঐতিহ্য (Culture)</button>
+    <button class="dj-chip" data-filter="documentary">প্রামাণ্যচিত্র (Documentary)</button>
+    <button class="dj-chip" data-filter="education">শিক্ষা ও বিজ্ঞান (Education)</button>
+    <button class="dj-chip" data-filter="sports">খেলাধুলা (Sports)</button>
+    <button class="dj-chip" data-filter="kids">শিশু ও কিশোর (Kids)</button>
+    <button class="dj-chip" data-filter="community">কমিউনিটি ও আঞ্চলিক (Community)</button>
+    <button class="dj-chip" data-filter="religious">ধর্ম ও নীতি (Religious)</button>
+  </div>
+</section>
+
+<!-- 3. FEATURED LIVE CHANNELS GRID -->
+<section class="dj-section">
+  <div class="dj-section-header">
+    <div class="dj-section-title-wrap">
+      <div class="dj-section-icon">📺</div>
+      <div>
+        <h2 class="dj-section-title">অনুমোদিত লাইভ চ্যানেল সমূহ</h2>
+        <p class="dj-section-subtitle">সকল সক্রিয় চ্যানেল সম্পূর্ণ বৈধ, অনুমোদিত এবং কপিরাইট সংরক্ষিত</p>
+      </div>
+    </div>
+    <a href="/discovery" class="dj-section-link">সবগুলো দেখুন →</a>
+  </div>
+
+  <div class="dj-channel-grid">
+    {% for ch in channels %}
+    <article class="dj-card" data-search-card
+             data-title="{{ ch.name | lower }} {{ ch.name_en | lower }}" 
+             data-category="{{ ch.category | lower }}" 
+             data-language="{{ ch.language | lower }}" 
+             data-country="{{ ch.country | lower }}"
+             data-bangladesh="{{ 'true' if ch.is_bangladesh else 'false' }}"
+             data-channel-json='{{ ch | tojson }}'>
+      
+      <div class="dj-card-top">
+        <div class="dj-card-logo">
+          {% if ch.is_bangladesh %}
+          <img src="/static/images/logo.svg" alt="{{ ch.name }}">
+          {% else %}
+          <span>{{ ch.callsign }}</span>
+          {% endif %}
+        </div>
+        <span class="dj-card-status-badge dj-card-status-live">সরাসরি সম্প্রচার</span>
+      </div>
+
+      <div class="dj-card-body">
+        <h3 class="dj-card-title">{{ ch.name }}</h3>
+        <div class="dj-card-meta">
+          <span class="dj-badge dj-badge-category">{{ ch.category_bn }}</span>
+          <span class="dj-badge dj-badge-res">{{ ch.resolution }}</span>
+        </div>
+        <p class="dj-card-desc">{{ ch.description_bn }}</p>
+      </div>
+
+      <div class="dj-card-footer">
+        <button class="dj-card-play-btn">
+          ▶ দেখুন
+        </button>
+        <div class="dj-card-actions">
+          <button class="dj-icon-btn" data-fav-id="{{ ch.id }}" data-fav-title="{{ ch.name }}" title="প্রিয় তালিকায় যোগ করুন">
+            🤍
+          </button>
+          <a href="/epg" class="dj-icon-btn" title="সময়সূচি দেখুন">
+            📅
+          </a>
+        </div>
+      </div>
+
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- 4. BANGLADESH DOCUMENTARY & INTERNATIONAL COVERAGE (BBC & AL JAZEERA) -->
+<section class="dj-section">
+  <div class="dj-section-header">
+    <div class="dj-section-title-wrap">
+      <div class="dj-section-icon" style="background: rgba(245, 158, 11, 0.2); color: var(--dj-gold);">🎬</div>
+      <div>
+        <h2 class="dj-section-title">বাংলাদেশ ও আন্তর্জাতিক প্রামাণ্যচিত্র হাব</h2>
+        <p class="dj-section-subtitle">বাংলাদেশ সংক্রান্ত বিবিসি ও আল জাজিরার প্রামাণ্যচিত্র এবং দৈনিক জাহানের বিশেষ অনুসন্ধান</p>
+      </div>
+    </div>
+    <a href="/documentaries" class="dj-section-link">সম্পূর্ণ হাব দেখুন →</a>
+  </div>
+
+  <div class="dj-doc-grid">
+    {% for doc in documentaries[:4] %}
+    <article class="dj-doc-card" data-search-card>
+      <div class="dj-doc-thumb">
+        <video muted playsinline loop style="width: 100%; height: 100%; object-fit: cover;">
+          <source src="{{ doc.fallback_video }}" type="video/mp4">
+        </video>
+        <div class="dj-doc-thumb-overlay">
+          <span class="dj-doc-badge-source">{{ doc.broadcaster }}</span>
+          <span class="dj-doc-duration">⏱ {{ doc.duration }}</span>
+        </div>
+      </div>
+      <div class="dj-doc-body">
+        <span class="dj-doc-broadcaster">{{ doc.sub_category }} • {{ doc.year }}</span>
+        <h3 class="dj-doc-title">{{ doc.title_bn }}</h3>
+        <p class="dj-doc-synopsis">{{ doc.synopsis_bn }}</p>
+        <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--dj-border); padding-top: 10px;">
+          <button class="dj-card-play-btn" onclick="playDocInMain('{{ doc.title_bn }}', '{{ doc.embed_url }}', '{{ doc.fallback_video }}', '{{ doc.broadcaster }}', '{{ doc.id }}')">
+            ▶ প্রামাণ্যচিত্র দেখুন
+          </button>
+          <a href="{{ doc.official_url }}" target="_blank" rel="noopener noreferrer" style="font-size: 12px; color: var(--dj-gold); text-decoration: underline;">
+            মূল সোর্স লিংক ↗
+          </a>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- 5. DAINIK JAHAN NEWS & VIDEO BULLETINS -->
+<section class="dj-section">
+  <div class="dj-section-header">
+    <div class="dj-section-title-wrap">
+      <div class="dj-section-icon" style="background: rgba(16, 185, 129, 0.2); color: var(--dj-green);">📰</div>
+      <div>
+        <h2 class="dj-section-title">দৈনিক জাহান সংবাদ ও ভিডিও বুলেটিন</h2>
+        <p class="dj-section-subtitle">দৈনিক জাহান নিউজরুমের জাতীয়, আন্তর্জাতিক ও ময়মনসিংহ আঞ্চলিক খবরাখবর</p>
+      </div>
+    </div>
+    <a href="/news" class="dj-section-link">সকল সংবাদ দেখুন →</a>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+    {% for n in news_articles[:3] %}
+    <article class="dj-card" data-search-card>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span class="dj-badge dj-badge-category">{{ n.category }}</span>
+        <span style="font-size: 11px; color: var(--dj-text-muted);">{{ n.timestamp }}</span>
+      </div>
+      <h3 style="font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 8px; line-height: 1.4;">{{ n.title }}</h3>
+      <p style="font-size: 13px; color: var(--dj-text-secondary); line-height: 1.5; margin-bottom: 12px;">{{ n.summary }}</p>
+      <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center;">
+        {% if n.has_video %}
+        <button class="dj-card-play-btn" onclick="playVideoBulletin('{{ n.title }}', '{{ n.video_url }}', '{{ n.id }}')">
+          🎥 ভিডিও বুলেটিন চালান
+        </button>
+        {% endif %}
+        <a href="/news#{{ n.id }}" style="font-size: 13px; color: #FF5A65; font-weight: 600;">বিস্তারিত পড়ুন →</a>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- 6. FEDERATION & OPEN PRINCIPLE BANNER -->
+<section class="dj-federation-banner">
+  <div class="dj-federation-quote">
+    “Federate the network, not the content.”
+  </div>
+  <p class="dj-federation-desc">
+    দৈনিক জাহান আইপিটিভি বিকেন্দ্রীভূত ও স্বায়ত্তশাসিত মিডিয়া ফেডারেশন সমর্থন করে। কমিউনিটিগুলো তাদের নিজস্ব মালিকানা, চ্যানেলের কনটেন্ট স্বত্ব এবং দর্শক সংযোগ অক্ষুণ্ণ রেখে দৈনিক জাহান ব্রডকাস্টিং নেটওয়ার্কে নোড হিসেবে যুক্ত হতে পারে। ওপেন সোর্স সফটওয়্যার মানে কখনোই কনটেন্টের উন্মুক্ত মালিকানা নয়।
+  </p>
+  <div class="dj-pipeline">
+    <span class="dj-pipeline-step">Core</span>
+    <span class="dj-pipeline-arrow">→</span>
+    <span class="dj-pipeline-step">Node</span>
+    <span class="dj-pipeline-arrow">→</span>
+    <span class="dj-pipeline-step">Web</span>
+    <span class="dj-pipeline-arrow">→</span>
+    <span class="dj-pipeline-step">Player</span>
+    <span class="dj-pipeline-arrow">→</span>
+    <span class="dj-pipeline-step">Federation</span>
+    <span class="dj-pipeline-arrow">→</span>
+    <span class="dj-pipeline-step">Schema</span>
+    <span class="dj-pipeline-arrow">→</span>
+    <span class="dj-pipeline-step">SDK</span>
+    <span class="dj-pipeline-arrow">→</span>
+    <span class="dj-pipeline-step">Deployment</span>
+    <span class="dj-pipeline-arrow">→</span>
+    <span class="dj-pipeline-step">Documentation</span>
+  </div>
+  <div style="margin-top: 14px;">
+    <a href="/federation" class="dj-btn-primary" style="font-size: 13px; padding: 8px 18px;">
+      ⚡ ফেডারেশন আর্কিটেকচার ও নোড রেজিস্ট্রেশন দেখুন
+    </a>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Player with default channel
+    const defaultChannel = {{ default_channel | tojson }};
+    const player = window.initDainikJahanPlayer({
+      videoId: 'djVideoElement',
+      iframeId: 'djIframeElement'
+    });
+    player.loadChannel(defaultChannel);
+
+    window.playDocInMain = function(title, embedUrl, fallbackUrl, broadcaster, docId) {
+      const channelObj = {
+        id: docId,
+        user_content_type: 'vod',
+        name: title,
+        category: 'Documentary',
+        category_bn: 'প্রামাণ্যচিত্র',
+        authorized_by: broadcaster,
+        resolution: '1080p HD',
+        bitrate: '4500 kbps',
+        primary_source: embedUrl || fallbackUrl,
+        secondary_source: fallbackUrl,
+        fallback_source: fallbackUrl,
+        stream_type: embedUrl ? 'embed' : 'video',
+        description_bn: title + ' — সম্প্রচারকারী: ' + broadcaster
+      };
+      player.loadChannel(channelObj);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.djShowToast('প্রামাণ্যচিত্র চালু হয়েছে');
+    };
+
+    window.playVideoBulletin = function(title, videoUrl, articleId) {
+      const newsChannel = {
+        id: articleId,
+        user_content_type: 'news',
+        name: title,
+        category: 'News',
+        category_bn: 'ভিডিও সংবাদ',
+        authorized_by: 'Dainik Jahan Newsdesk',
+        resolution: '1080p HD',
+        bitrate: '3800 kbps',
+        primary_source: videoUrl,
+        fallback_source: videoUrl,
+        stream_type: 'video',
+        description_bn: 'দৈনিক জাহানের বিশেষ ভিডিও বুলেটিন প্রতিবেদন'
+      };
+      player.loadChannel(newsChannel);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.djShowToast('ভিডিও সংবাদ বুলেটিন চালু করা হয়েছে');
+    };
+  });
+</script>
+{% endblock %}

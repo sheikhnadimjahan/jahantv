@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}দৈনিক জাহান আইপিটিভি — Dainik Jahan IPTV | জাতীয় ও আন্তর্জাতিক ডিজিটাল সম্প্রচার{% endblock %}</title>
+  
+  <!-- Favicon & Official Round Logo Identity -->
+  <link rel="icon" type="image/svg+xml" href="/static/images/favicon.svg">
+  <link rel="apple-touch-icon" href="/static/images/logo.png">
+
+  <!-- Typography: Bengali and Inter Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Tiro+Bangla:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Core Broadcast Stylesheet -->
+  <link rel="stylesheet" href="/static/css/styles.css">
+
+  <!-- Hls.js Library (Standalone embed fallback) -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <!-- Top Breaking News Ticker -->
+  <aside class="dj-top-bar" aria-label="ব্রেকিং নিউজ ও সম্প্রচার আপডেট">
+    <div class="dj-ticker-wrap">
+      <span class="dj-ticker-label">
+        <span class="pulse-dot"></span> ব্রেকিং বুলেটিন
+      </span>
+      <div class="dj-ticker-text">
+        🔴 <strong>দৈনিক জাহান অনলাইন আইপিটিভি:</strong> ২৪/৭ অনুমোদিত লাইভ সম্প্রচার, বাংলাদেশ ও আন্তর্জাতিক সংবাদ এবং প্রামাণ্যচিত্র • ময়মনসিংহ, ঢাকা ও বিশ্বজুড়ে সরাসরি সম্প্রচারিত • ব্রহ্মপুত্র অববাহিকার সংস্কৃতি ও জাতীয় অগ্রগতির ডিজিটাল নেটওয়ার্ক • "ফেডারেট দ্য নেটওয়ার্ক, নট দ্য কনটেন্ট"
+      </div>
+    </div>
+    <div style="display: flex; gap: 14px; font-size: 12px;">
+      <span id="liveClock">ঢাকা: সময় লোড হচ্ছে...</span>
+      <span>|</span>
+      <a href="/policy/federation" style="color: var(--dj-gold);">🌐 উন্মুক্ত ফেডারেশন হাব</a>
+    </div>
+  </aside>
+
+  <!-- Official Masthead Header -->
+  <header class="dj-header">
+    <div class="dj-header-inner">
+      
+      <!-- Official Dainik Jahan Brand Identity -->
+      <a href="/" class="dj-brand" title="দৈনিক জাহান আইপিটিভি হোম">
+        <div class="dj-logo-frame">
+          <img src="/static/images/logo.svg" alt="দৈনিক জাহান অফিশিয়াল লোগো" width="52" height="52">
+        </div>
+        <div class="dj-brand-titles">
+          <span class="dj-brand-name">দৈনিক জাহান</span>
+          <span class="dj-brand-sub">IPTV BROADCAST • সত্য ও ন্যায়ের পক্ষে আপসহীন</span>
+        </div>
+      </a>
+
+      <!-- Navigation Menu (All Active and Clickable) -->
+      <nav class="dj-nav" aria-label="মূল নেভিগেশন">
+        <a href="/" class="dj-nav-link {% if active_page == 'home' %}active{% endif %}">
+          <span>📺</span> লাইভ টিভি
+        </a>
+        <a href="/epg" class="dj-nav-link {% if active_page == 'epg' %}active{% endif %}">
+          <span>📅</span> টিভি গাইড (EPG)
+        </a>
+        <a href="/documentaries" class="dj-nav-link {% if active_page == 'documentaries' %}active{% endif %}">
+          <span>🎬</span> বাংলাদেশ ও বিশ্ব প্রামাণ্যচিত্র
+        </a>
+        <a href="/news" class="dj-nav-link {% if active_page == 'news' %}active{% endif %}">
+          <span>📰</span> জাহান ভিডিও সংবাদ
+        </a>
+        <a href="/discovery" class="dj-nav-link {% if active_page == 'discovery' %}active{% endif %}">
+          <span>🔍</span> চ্যানেল ডিসকভারি
+        </a>
+        <a href="/vod" class="dj-nav-link {% if active_page == 'vod' %}active{% endif %}">
+          <span>🎞️</span> ভিওডি (VOD)
+        </a>
+        <a href="/favorites" class="dj-nav-link {% if active_page == 'favorites' %}active{% endif %}">
+          <span>❤️</span> আমার টিভি
+        </a>
+        <a href="/submissions" class="dj-nav-link {% if active_page == 'submissions' %}active{% endif %}">
+          <span>✍️</span> প্রস্তাবনা ও মতামত
+        </a>
+        <a href="/federation" class="dj-nav-link {% if active_page == 'federation' %}active{% endif %}">
+          <span>⚡</span> ফেডারেশন
+        </a>
+      </nav>
+
+      <!-- Header Search and Live Indicator -->
+      <div class="dj-header-actions">
+        <div class="dj-search-bar">
+          <span class="dj-search-icon">🔍</span>
+          <input type="text" id="djGlobalSearch" class="dj-search-input" placeholder="চ্যানেল বা বিষয় খুঁজুন...">
+        </div>
+        <a href="/#player-section" class="dj-live-pulse-btn">
+          <span class="pulse-dot"></span> সরাসরি দেখুন
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Viewport Content -->
+  <main class="dj-main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="dj-footer">
+    <div class="dj-footer-inner">
+      
+      <!-- Brand & Mission -->
+      <div class="dj-footer-brand">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <img src="/static/images/logo.svg" alt="দৈনিক জাহান" width="40" height="40">
+          <span style="font-size: 20px; font-weight: 800; color: #fff;">দৈনিক জাহান</span>
+        </div>
+        <p style="font-size: 13px; line-height: 1.6; color: var(--dj-text-muted);">
+          দৈনিক জাহান আইপিটিভি হলো দৈনিক জাহানের গ্লোবাল ডিজিটাল ব্রডকাস্টিং ডিভিশন। আমরা সম্পূর্ণ বৈধ, অনুমোদিত এবং কপিরাইট সংরক্ষিত সংবাদ, শিক্ষা, সংস্কৃতি ও পাবলিক-ইন্টারেস্ট প্রোগ্রাম বিশ্বজুড়ে পরিবেশন করি।
+        </p>
+        <p style="font-size: 12px; color: var(--dj-gold); font-family: var(--dj-font-mono);">
+          “Federate the network, not the content.”
+        </p>
+      </div>
+
+      <!-- Quick Nav -->
+      <div>
+        <h4 class="dj-footer-title">সম্প্রচার বিভাগ</h4>
+        <ul class="dj-footer-links">
+          <li><a href="/">লাইভ টিভি ও চ্যানেল</a></li>
+          <li><a href="/epg">টিভি গাইড ও সূচি (EPG)</a></li>
+          <li><a href="/documentaries">বাংলাদেশ প্রামাণ্যচিত্র হাব</a></li>
+          <li><a href="/news">দৈনিক জাহান ভিডিও নিউজ</a></li>
+          <li><a href="/vod">অন-ডিমান্ড লাইব্রেরি (VOD)</a></li>
+          <li><a href="/discovery">আন্তর্জাতিক ও আঞ্চলিক চ্যানেল</a></li>
+        </ul>
+      </div>
+
+      <!-- Mandatory Policy Pages (10 Dedicated Links) -->
+      <div>
+        <h4 class="dj-footer-title">নীতিমালা ও বিধিবিধান</h4>
+        <ul class="dj-footer-links">
+          <li><a href="/policy/copyright">কপিরাইট সুরক্ষা (Copyright)</a></li>
+          <li><a href="/policy/privacy">গোপনীয়তা নীতি (Privacy)</a></li>
+          <li><a href="/policy/editorial">সম্পাদকীয় নীতিমালা (Editorial)</a></li>
+          <li><a href="/policy/distribution">কনটেন্ট ও বিতরণ (Distribution)</a></li>
+          <li><a href="/policy/governance">কমিউনিটি পরিচালনা (Governance)</a></li>
+          <li><a href="/policy/federation">ফেডারেশন পলিসি (Federation)</a></li>
+          <li><a href="/policy/security">তথ্য নিরাপত্তা (Security)</a></li>
+          <li><a href="/policy/terms">ব্যবহারের শর্তাবলী (Terms of Use)</a></li>
+          <li><a href="/policy/opensource">উন্মুক্ত সোর্স নীতি (Open-Source)</a></li>
+          <li><a href="/contact">যোগাযোগ ও নিউজডেস্ক (Contact)</a></li>
+        </ul>
+      </div>
+
+      <!-- Community & Contact -->
+      <div>
+        <h4 class="dj-footer-title">যোগাযোগ ও অংশগ্রহণ</h4>
+        <ul class="dj-footer-links">
+          <li><a href="/submissions?type=channel">চ্যানেল অন্তর্ভুক্তির প্রস্তাবনা</a></li>
+          <li><a href="/submissions?type=documentary">প্রামাণ্যচিত্র জমা দিন</a></li>
+          <li><a href="/submissions?type=correction">তথ্য সংশোধনী ও ফ্যাক্ট-চেক</a></li>
+          <li><a href="/submissions?type=partnership">সম্প্রচার অংশীদারিত্ব</a></li>
+          <li><a href="/federation">ফেডারেশন নোড নিবন্ধন</a></li>
+          <li><a href="/contact">প্রধান কার্যালয়: ময়মনসিংহ, বাংলাদেশ</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Copyright Bar -->
+    <div class="dj-footer-bottom">
+      <div>
+        © ২০২৬ দৈনিক জাহান (Dainik Jahan). সর্বস্বত্ব সংরক্ষিত। পাইরেসি ও অননুমোদিত পুনর্সম্প্রচার সম্পূর্ণ নিষিদ্ধ ও দণ্ডনীয়।
+      </div>
+      <div style="display: flex; gap: 14px; font-size: 12px;">
+        <span>প্রধান কার্যালয়: জাহান ভবন, ময়মনসিংহ, বাংলাদেশ</span>
+        <span>•</span>
+        <span>ইমেইল: iptv@dainikjahan.com</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="djGlobalToast" class="dj-toast" role="status" aria-live="polite"></div>
+
+  <!-- Global JavaScript Modules -->
+  <script src="/static/js/user.js"></script>
+  <script src="/static/js/player.js"></script>
+  <script src="/static/js/app.js"></script>
+
+  <script>
+    // Live Clock Updater
+    function updateClock() {
+      const el = document.getElementById('liveClock');
+      if (el) {
+        const now = new Date();
+        const options = { timeZone: 'Asia/Dhaka', hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        el.textContent = `ঢাকা সময়: ${now.toLocaleTimeString('bn-BD', options)}`;
+      }
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

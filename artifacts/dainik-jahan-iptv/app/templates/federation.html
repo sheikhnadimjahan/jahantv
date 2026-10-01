@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}উন্মুক্ত ফেডারেশন হাব ও আর্কিটেকচার — দৈনিক জাহান আইপিটিভি{% endblock %}
+
+{% block content %}
+<section class="dj-section">
+  
+  <!-- Core Principle Banner -->
+  <div class="dj-federation-banner" style="margin-bottom: 36px;">
+    <div style="font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: var(--dj-gold); font-weight: 700;">
+      DAINIK JAHAN OPEN BROADCAST MANIFESTO
+    </div>
+    <div class="dj-federation-quote">
+      “Federate the network, not the content.”
+    </div>
+    <p class="dj-federation-desc">
+      {{ fed_data.philosophy_bn }}
+    </p>
+    <div style="font-size: 14px; color: #fff; font-weight: 600; margin-top: 6px;">
+      ওপেন সোর্স সফটওয়্যার মানে কখনোই কনটেন্টের উন্মুক্ত মালিকানা নয়। কপিরাইট ও কনটেন্ট স্বত্বাধিকার সর্বদা সৃষ্টিকর্তা ও ব্রডকাস্টারের হাতে সুরক্ষিত।
+    </div>
+  </div>
+
+  <!-- 9 Layer Architecture Explorer -->
+  <div class="dj-section-header">
+    <div class="dj-section-title-wrap">
+      <div class="dj-section-icon">⚡</div>
+      <div>
+        <h2 class="dj-section-title">৯-স্তর বিশিষ্ট মডুলার আর্কিটেকচার</h2>
+        <p class="dj-section-subtitle">Core → Node → Web → Player → Federation → Schema → SDK → Deployment → Documentation</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 40px;">
+    {% for layer in fed_data.layers %}
+    <div class="dj-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span style="font-family: var(--dj-font-mono); font-weight: 800; color: var(--dj-red); font-size: 18px;">
+          0{{ layer.step }}
+        </span>
+        <span class="dj-badge dj-badge-res">{{ layer.layer }}</span>
+      </div>
+      <h3 style="font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px;">{{ layer.name_bn }}</h3>
+      <p style="font-size: 13px; color: var(--dj-text-muted); line-height: 1.5;">{{ layer.desc_bn }}</p>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Active Federated Nodes Registry -->
+  <div class="dj-section-header">
+    <div class="dj-section-title-wrap">
+      <div class="dj-section-icon" style="background: rgba(16, 185, 129, 0.2); color: var(--dj-green);">🌐</div>
+      <div>
+        <h2 class="dj-section-title">সক্রিয় ফেডারেশন নোড রেজিস্ট্রি</h2>
+        <p class="dj-section-subtitle">দৈনিক জাহান মিডিয়া নেটওয়ার্কে সংযুক্ত অনুমোদিত স্বায়ত্তশাসিত কমিউনিটি রিলে</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-bottom: 40px;">
+    {% for node in fed_data.nodes %}
+    <div class="dj-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <span style="font-family: var(--dj-font-mono); font-size: 12px; color: var(--dj-gold);">{{ node.id }}</span>
+        <span class="dj-card-status-badge dj-card-status-live">{{ node.status }}</span>
+      </div>
+      <h3 style="font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px;">{{ node.name }}</h3>
+      <div style="font-size: 13px; color: var(--dj-text-secondary); margin-bottom: 4px;">📍 অবস্থান: {{ node.location }}</div>
+      <div style="font-size: 13px; color: var(--dj-text-muted); margin-bottom: 10px;">পরিচালক: {{ node.operator }}</div>
+      <div style="border-top: 1px solid var(--dj-border); padding-top: 10px; display: flex; justify-content: space-between; font-size: 11px; font-family: var(--dj-font-mono); color: var(--dj-text-muted);">
+        <span>চ্যানেল: {{ node.channels_relayed }}টি</span>
+        <span>লেটেন্সি: {{ node.latency }}</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Interactive Node Registration Form -->
+  <div class="dj-section-header">
+    <div class="dj-section-title-wrap">
+      <div class="dj-section-icon" style="background: rgba(59, 130, 246, 0.2); color: var(--dj-blue);">🔗</div>
+      <div>
+        <h2 class="dj-section-title">কমিউনিটি নোড ফেডারেশন নিবন্ধন</h2>
+        <p class="dj-section-subtitle">আপনার স্বায়ত্তশাসিত আঞ্চলিক সম্প্রচার স্টেশন দৈনিক জাহান ফেডারেশন নেটওয়ার্কে যুক্ত করুন</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dj-form-card" style="margin-bottom: 40px;">
+    <form id="nodeRegForm">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="dj-form-group">
+          <label class="dj-label">নোডের নাম (Node Name) *</label>
+          <input type="text" id="nodeName" class="dj-input" placeholder="উদাঃ বরেন্দ্র লোকসম্প্রচার হাব" required>
+        </div>
+        <div class="dj-form-group">
+          <label class="dj-label">পরিচালক সংস্থা (Operator) *</label>
+          <input type="text" id="nodeOperator" class="dj-input" placeholder="উদাঃ রাজশাহী কমিউনিটি মিডিয়া ট্রাস্ট" required>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px;">
+        <div class="dj-form-group">
+          <label class="dj-label">পাবলিক এপিআই এন্ডপয়েন্ট (Endpoint URL) *</label>
+          <input type="url" id="nodeUrl" class="dj-input" placeholder="https://node.example.org/api/v1" required>
+        </div>
+        <div class="dj-form-group">
+          <label class="dj-label">ভৌগোলিক অঞ্চল (Region) *</label>
+          <input type="text" id="nodeRegion" class="dj-input" placeholder="উদাঃ Rajshahi, BD" required>
+        </div>
+      </div>
+      <div class="dj-checkbox-wrap">
+        <input type="checkbox" id="nodeAgreement" required>
+        <label for="nodeAgreement">
+          আমরা নিশ্চিত করছি যে আমাদের সম্প্রচারিত সকল চ্যানেল নিজস্ব বা অনুমোদিত লাইসেন্সপ্রাপ্ত এবং আমরা “Federate the network, not the content” মূলনীতি ও এন্টি-পাইরেসি বিধিমালা মেনে চলব।
+        </label>
+      </div>
+      <button type="submit" class="dj-btn-primary" style="width: 100%;">
+        ⚡ নোড পিয়ারিং রিকোয়েস্ট পাঠান (Submit Peering Request)
+      </button>
+    </form>
+    <div id="nodeErrorBox" role="alert" style="display: none; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.55); border-radius: var(--dj-radius-md); padding: 14px 18px; margin-top: 18px; color: #ffd5d7;"></div>
+    <div id="nodeSuccessBox" style="display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid #10B981; border-radius: var(--dj-radius-md); padding: 18px; margin-top: 20px; text-align: center;">
+      <h3 style="color: #10B981; margin-bottom: 6px;">🎉 নোড সফলভাবে নিবন্ধিত হয়েছে!</h3>
+      <p style="font-size: 13px; color: #fff;">আপনার নোড আইডি: <strong id="registeredNodeId" style="color: var(--dj-gold); font-family: var(--dj-font-mono);"></strong></p>
+    </div>
+  </div>
+
+  <!-- Open Schemas & SDK Code Snippets -->
+  <div class="dj-card" style="padding: 24px;">
+    <h3 style="font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 12px;">
+      উন্মুক্ত পাইথন ও জাভাস্ক্রিপ্ট SDK সংযোগ নমুনা
+    </h3>
+    <pre style="background: #080A0E; border: 1px solid var(--dj-border); border-radius: var(--dj-radius-sm); padding: 16px; overflow-x: auto; font-family: var(--dj-font-mono); font-size: 13px; color: #38BDF8; line-height: 1.5;">
+# Python SDK Example — Registering your station stream with Dainik Jahan Core
+from dainik_jahan_sdk import JahanNodeClient
+
+client = JahanNodeClient(
+    node_id="FED-BOGRA-01",
+    api_key="your_optin_token",
+    endpoint="https://dainikjahan.com/api/federation"
+)
+
+# Announce local authorized broadcast
+client.publish_channel({
+    "id": "bogra-heritage-tv",
+    "name": "বগুড়া লোকঐতিহ্য টিভি",
+    "stream_url": "https://stream.bogra.org/live.m3u8",
+    "category": "Culture",
+    "license": "Broadcaster-Retained"
+})
+print("Node synchronized with Dainik Jahan Relay Network.")
+    </pre>
+  </div>
+
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const f = document.getElementById('nodeRegForm');
+    if (f) {
+      const errorBox = document.getElementById('nodeErrorBox');
+      const submitButton = f.querySelector('button[type="submit"]');
+      const originalButtonText = submitButton.textContent;
+      f.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorBox.style.display = 'none';
+        submitButton.disabled = true;
+        submitButton.textContent = 'অনুরোধ পাঠানো হচ্ছে...';
+        const payload = {
+          name: document.getElementById('nodeName').value,
+          operator: document.getElementById('nodeOperator').value,
+          endpoint_url: document.getElementById('nodeUrl').value,
+          region: document.getElementById('nodeRegion').value,
+          channels_count: 1
+        };
+        try {
+          const res = await fetch('/iptv-api/federation/register', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (!res.ok || data.status !== 'success') {
+            const detail = Array.isArray(data.detail) ? 'ফর্মের তথ্যগুলো যাচাই করে আবার চেষ্টা করুন।' : data.detail;
+            throw new Error(data.message || detail || 'নোড নিবন্ধন করা যায়নি।');
+          }
+          f.style.display = 'none';
+          document.getElementById('registeredNodeId').textContent = data.node_id;
+          document.getElementById('nodeSuccessBox').style.display = 'block';
+          window.djShowToast('নোড সফলভাবে নিবন্ধিত হয়েছে');
+        } catch (err) {
+          console.error('Federation registration error:', err);
+          errorBox.textContent = `${err.message || 'নোড নিবন্ধন করা যায়নি।'} অনুগ্রহ করে আবার চেষ্টা করুন।`;
+          errorBox.style.display = 'block';
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = originalButtonText;
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}

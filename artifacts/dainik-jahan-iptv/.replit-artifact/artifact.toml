@@ -1,0 +1,32 @@
+kind = "web"
+previewPath = "/"
+title = "Dainik Jahan IPTV"
+description = "A Bengali digital broadcasting platform for Dainik Jahan, with live channels, documentaries, EPG, community submissions, and federation information."
+version = "1.0.0"
+id = "artifacts/dainik-jahan-iptv"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23847
+
+[services.development]
+run = "python3 -m uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+
+[services.production.build]
+args = [ "uv", "sync", "--frozen", "--no-dev", "--no-install-project" ]
+
+[services.production.run]
+args = [ "uv", "run", "--frozen", "--no-sync", "python", "-m", "uvicorn", "app.main:app", "--app-dir", "artifacts/dainik-jahan-iptv", "--host", "0.0.0.0", "--port", "23847" ]
+
+[services.production.run.env]
+PORT = "23847"
+PYTHONUNBUFFERED = "1"
+
+[services.production.health.startup]
+path = "/iptv-api/health-check"
+
+[services.env]
+PORT = "23847"
+BASE_PATH = "/"

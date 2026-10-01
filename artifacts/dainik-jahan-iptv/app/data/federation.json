@@ -1,0 +1,116 @@
+{
+  "core_principle": "Federate the network, not the content.",
+  "philosophy_bn": "নেটওয়ার্ককে যুক্ত করুন, কনটেন্টের মালিকানাকে নয়। প্রত্যেক কমিউনিটি তাদের নিজস্ব আইডেন্টিটি, কনটেন্ট স্বত্ব, দর্শক এবং সম্পাদকীয় নিয়ন্ত্রণ অক্ষুণ্ণ রাখবে। ফেডারেশন সম্পূর্ণভাবে অপ্ট-ইন এবং স্বাধীন।",
+  "philosophy_en": "Federate the network, not the content. Communities retain their own identity, channels, audience, editorial sovereignty, copyright, and distribution permissions. Federation is strictly opt-in.",
+  "layers": [
+    {
+      "step": 1,
+      "layer": "Core",
+      "name_bn": "কোর ইঞ্জিন",
+      "desc_bn": "উচ্চক্ষমতাসম্পন্ন মেটাডাটা ব্যাকবোন, রুট-লেভেল ডিসকভারি সার্ভিস এবং হেলথ-চেক অর্কেস্ট্রেশন ইঞ্জিন।",
+      "desc_en": "High-throughput metadata backbone, route registry, and health validation engine."
+    },
+    {
+      "step": 2,
+      "layer": "Node",
+      "name_bn": "কমিউনিটি নোড",
+      "desc_bn": "স্বাধীন ব্রডকাস্টার বা আঞ্চলিক মিডিয়ার স্বায়ত্তশাসিত সার্ভার যা স্থানীয় চ্যানেল ও অডিও-ভিডিও স্ট্রিম পরিবেশন করে।",
+      "desc_en": "Autonomous edge relay hosted by regional broadcasters, communities, or diaspora groups."
+    },
+    {
+      "step": 3,
+      "layer": "Web",
+      "name_bn": "ওয়েব ইন্টারফেস",
+      "desc_bn": "রেসপন্সিভ, লাইটওয়েট এবং উচ্চ অ্যাক্সেসিবিলিটি সম্পন্ন পোর্টাল যা যেকোনো ডিভাইসে দ্রুত কাজ করে।",
+      "desc_en": "Zero-dependency, high-speed responsive UI optimized for TV, mobile, and desktop."
+    },
+    {
+      "step": 4,
+      "layer": "Player",
+      "name_bn": "প্লেয়ার ইঞ্জিন",
+      "desc_bn": "মাল্টি-প্রোটোকল প্লেয়ার (HLS, MP4, WebRTC, অফিশিয়াল অনুমোদিত এমবেড) ও স্বয়ংক্রিয় ফলব্যাক সিস্টেম।",
+      "desc_en": "Multi-protocol playback engine with automated CORS health checks, adaptive bitrate, and PiP."
+    },
+    {
+      "step": 5,
+      "layer": "Federation",
+      "name_bn": "ফেডারেশন কন্ট্রোল",
+      "desc_bn": "পিয়ার-টু-পিয়ার নোড হ্যান্ডশেক, অ্যাক্টিভিটিপাব-অনুপ্রাণিত মেটাডাটা সিন্ডিকেশন ও ক্রিপ্টোগ্রাফিক ভ্যালিডেশন।",
+      "desc_en": "Decentralized peer-to-peer registry handshake, opt-in syndication, and cryptographic signing."
+    },
+    {
+      "step": 6,
+      "layer": "Schema",
+      "name_bn": "উন্মুক্ত স্কিমা",
+      "desc_bn": "চ্যানেল, প্রোগ্রাম গাইড (EPG), লাইভ স্টেটাস ও স্ট্রিম হেলথের সুনির্দিষ্ট JSON-LD স্পেসিফিকেশন।",
+      "desc_en": "Standardized JSON-LD / ActivityPub compatible specifications for channels, streams, and EPG."
+    },
+    {
+      "step": 7,
+      "layer": "SDK",
+      "name_bn": "ডেভেলপার এসডিকে",
+      "desc_bn": "পাইথন ও জাভাস্ক্রিপ্ট ক্লায়েন্ট লাইব্রেরি যার মাধ্যমে যেকোনো নতুন নোড কয়েক মিনিটে নেটওয়ার্কে যুক্ত হতে পারে।",
+      "desc_en": "Lightweight Python and JavaScript client libraries for effortless integration."
+    },
+    {
+      "step": 8,
+      "layer": "Deployment",
+      "name_bn": "ডিপ্লয়মেন্ট ও হোস্টিং",
+      "desc_bn": "ডকার, কুবারনেটিস এবং ক্লাউড-নেটিভ সার্ভারলেস প্ল্যাটফর্মে নির্বিঘ্ন ইনস্টলেশন গাইডলাইন।",
+      "desc_en": "Self-hosted Docker and bare-metal orchestration guides with zero vendor lock-in."
+    },
+    {
+      "step": 9,
+      "layer": "Documentation",
+      "name_bn": "উন্মুক্ত নির্দেশিকা",
+      "desc_bn": "এপিআই ডকুমেন্টেশন, সিকিউরিটি বেস্ট প্র্যাকটিস এবং কমিউনিটি পরিচালনা নীতিমালার উন্মুক্ত সহায়িকা।",
+      "desc_en": "Comprehensive documentation, security audits, and ethical broadcasting manifests."
+    }
+  ],
+  "nodes": [
+    {
+      "id": "DJ-MYM-CORE-01",
+      "name": "দৈনিক জাহান সেন্ট্রাল হাব (HQ)",
+      "location": "Mymensingh, Bangladesh",
+      "operator": "Dainik Jahan Broadcast Ltd.",
+      "channels_relayed": 6,
+      "latency": "24ms",
+      "status": "online",
+      "public_key": "ed25519:dj88f912c401aa99c82",
+      "federated_since": "2024-01-15"
+    },
+    {
+      "id": "BD-DHK-RELAY-01",
+      "name": "ঢাকা মেট্রোপলিটন কমিউনিটি নোড",
+      "location": "Dhaka, Bangladesh",
+      "operator": "Bangladesh Open Media Federation",
+      "channels_relayed": 4,
+      "latency": "18ms",
+      "status": "online",
+      "public_key": "ed25519:dhk23990fa18bb7201",
+      "federated_since": "2024-03-20"
+    },
+    {
+      "id": "FED-SYL-LON-03",
+      "name": "সিলেট-লন্ডন ডায়াসপোরা নোড",
+      "location": "London, United Kingdom",
+      "operator": "Sylhet Community Heritage Network UK",
+      "channels_relayed": 2,
+      "latency": "135ms",
+      "status": "online",
+      "public_key": "ed25519:lon98218cca4401bb9",
+      "federated_since": "2024-06-10"
+    },
+    {
+      "id": "FED-CTG-PORT-02",
+      "name": "চট্টগ্রাম মেরিটাইম কোস্টাল রিলে",
+      "location": "Chittagong, Bangladesh",
+      "operator": "Coastal Media Cooperative",
+      "channels_relayed": 1,
+      "latency": "32ms",
+      "status": "online",
+      "public_key": "ed25519:ctg7719280ab4410aa7",
+      "federated_since": "2024-08-01"
+    }
+  ]
+}

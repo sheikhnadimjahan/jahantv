@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}টিভি গাইড ও অনুষ্ঠান সূচি (EPG) — দৈনিক জাহান আইপিটিভি{% endblock %}
+
+{% block content %}
+<section class="dj-section">
+  <div class="dj-section-header">
+    <div class="dj-section-title-wrap">
+      <div class="dj-section-icon">📅</div>
+      <div>
+        <h1 class="dj-section-title">ইলেকট্রনিক প্রোগ্রাম গাইড (EPG)</h1>
+        <p class="dj-section-subtitle">দৈনিক জাহান এবং অনুমোদিত চ্যানেলের ২৪ ঘণ্টার লাইভ অনুষ্ঠান সূচি</p>
+      </div>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button type="button" class="dj-chip active" id="btnToday" aria-pressed="true">আজকের সূচি</button>
+      <button type="button" class="dj-chip" id="btnTomorrow" aria-pressed="false">আগামীকালের সূচি</button>
+    </div>
+  </div>
+
+  <div class="dj-epg-container">
+    
+    <div class="dj-epg-toolbar">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-weight: 700; color: #fff;">বর্তমান সম্প্রচার সময়কাল:</span>
+        <span class="dj-badge dj-badge-auth">২৪ ঘণ্টা লাইভ সিডিউল</span>
+      </div>
+      <div style="font-size: 13px; color: var(--dj-text-muted);">
+        * লাল সীমানা নির্দেশ করে বর্তমানে লাইভ সম্প্রচারিত অনুষ্ঠান
+      </div>
+    </div>
+
+    <div id="epgTomorrowNotice" class="dj-card" role="status" aria-live="polite" style="display: none; margin: 18px 0; padding: 22px;">
+      আগামীকালের যাচাইকৃত অনুষ্ঠান সূচি এখনো প্রকাশিত হয়নি। প্রকাশিত হলে এই পাতায় দেখা যাবে।
+    </div>
+    <div class="dj-epg-timeline-wrap" id="epgScheduleWrap">
+      <div class="dj-epg-grid">
+        
+        <!-- Row for Dainik Jahan Live -->
+        <div class="dj-epg-channel-row">
+          <div class="dj-epg-channel-header">
+            <img src="/static/images/logo.svg" alt="দৈনিক জাহান" width="36" height="36">
+            <div>
+              <div style="font-weight: 800; color: #fff; font-size: 14px;">দৈনিক জাহান লাইভ</div>
+              <div style="font-size: 11px; color: var(--dj-red); font-weight: 700;">DJ-TV • 1080p HD</div>
+            </div>
+          </div>
+          <div class="dj-epg-slots">
+            {% for item in epg_data['dainik-jahan-live'] %}
+            <div class="dj-epg-slot {% if item.is_live %}now-playing{% endif %}">
+              <div class="dj-epg-time">
+                <span>{{ item.start }} — {{ item.end }}</span>
+                {% if item.is_live %}
+                <span class="dj-card-status-badge dj-card-status-live" style="font-size: 9px; padding: 1px 6px;">এখন লাইভ</span>
+                {% endif %}
+              </div>
+              <div class="dj-epg-slot-title">{{ item.title_bn }}</div>
+              <div class="dj-epg-slot-desc">{{ item.desc }}</div>
+              <div style="margin-top: 8px; font-size: 11px; color: var(--dj-gold);">
+                উপস্থাপক: {{ item.host }}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Row for BTV World -->
+        <div class="dj-epg-channel-row">
+          <div class="dj-epg-channel-header">
+            <div style="width: 36px; height: 36px; background: #0A0D14; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #10B981;">BTV</div>
+            <div>
+              <div style="font-weight: 800; color: #fff; font-size: 14px;">বিটিভি ওয়ার্ল্ড</div>
+              <div style="font-size: 11px; color: var(--dj-text-muted);">BTV-WLD • স্টেট সার্ভিস</div>
+            </div>
+          </div>
+          <div class="dj-epg-slots">
+            {% for item in epg_data['btv-world'] %}
+            <div class="dj-epg-slot {% if item.is_live %}now-playing{% endif %}">
+              <div class="dj-epg-time">
+                <span>{{ item.start }} — {{ item.end }}</span>
+                {% if item.is_live %}
+                <span class="dj-card-status-badge dj-card-status-live" style="font-size: 9px; padding: 1px 6px;">এখন লাইভ</span>
+                {% endif %}
+              </div>
+              <div class="dj-epg-slot-title">{{ item.title_bn }}</div>
+              <div class="dj-epg-slot-desc">{{ item.desc }}</div>
+              <div style="margin-top: 8px; font-size: 11px; color: var(--dj-gold);">
+                বিভাগ: {{ item.host }}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Row for Al Jazeera -->
+        <div class="dj-epg-channel-row">
+          <div class="dj-epg-channel-header">
+            <div style="width: 36px; height: 36px; background: #0A0D14; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--dj-gold);">AJE</div>
+            <div>
+              <div style="font-weight: 800; color: #fff; font-size: 14px;">আল জাজিরা ইংলিশ</div>
+              <div style="font-size: 11px; color: var(--dj-text-muted);">AJE-HD • আন্তর্জাতিক</div>
+            </div>
+          </div>
+          <div class="dj-epg-slots">
+            {% for item in epg_data['al-jazeera-english'] %}
+            <div class="dj-epg-slot {% if item.is_live %}now-playing{% endif %}">
+              <div class="dj-epg-time">
+                <span>{{ item.start }} — {{ item.end }}</span>
+                {% if item.is_live %}
+                <span class="dj-card-status-badge dj-card-status-live" style="font-size: 9px; padding: 1px 6px;">এখন লাইভ</span>
+                {% endif %}
+              </div>
+              <div class="dj-epg-slot-title">{{ item.title_bn }}</div>
+              <div class="dj-epg-slot-desc">{{ item.desc }}</div>
+              <div style="margin-top: 8px; font-size: 11px; color: var(--dj-gold);">
+                অ্যাঙ্কর: {{ item.host }}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const today = document.getElementById('btnToday');
+    const tomorrow = document.getElementById('btnTomorrow');
+    const schedule = document.getElementById('epgScheduleWrap');
+    const notice = document.getElementById('epgTomorrowNotice');
+    if (!today || !tomorrow || !schedule || !notice) return;
+
+    const showToday = () => {
+      today.classList.add('active');
+      tomorrow.classList.remove('active');
+      today.setAttribute('aria-pressed', 'true');
+      tomorrow.setAttribute('aria-pressed', 'false');
+      schedule.style.display = '';
+      notice.style.display = 'none';
+    };
+
+    const showTomorrow = () => {
+      tomorrow.classList.add('active');
+      today.classList.remove('active');
+      tomorrow.setAttribute('aria-pressed', 'true');
+      today.setAttribute('aria-pressed', 'false');
+      schedule.style.display = 'none';
+      notice.style.display = 'block';
+    };
+
+    today.addEventListener('click', showToday);
+    tomorrow.addEventListener('click', showTomorrow);
+  });
+</script>
+{% endblock %}

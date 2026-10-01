@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}বাংলাদেশ ও আন্তর্জাতিক প্রামাণ্যচিত্র হাব — দৈনিক জাহান আইপিটিভি{% endblock %}
+
+{% block content %}
+<section class="dj-section">
+  <div class="dj-section-header">
+    <div class="dj-section-title-wrap">
+      <div class="dj-section-icon" style="background: rgba(245, 158, 11, 0.2); color: var(--dj-gold);">🎬</div>
+      <div>
+        <h1 class="dj-section-title">বাংলাদেশ ও আন্তর্জাতিক প্রামাণ্যচিত্র হাব</h1>
+        <p class="dj-section-subtitle">বিবিসি, আল জাজিরা ও দৈনিক জাহানের বাংলাদেশ বিষয়ক নিরপেক্ষ অনুসন্ধান ও ঐতিহাসিক তথ্যচিত্র</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legal & Copyright Notice for Third-Party Embeds -->
+  <div style="background: #10141E; border: 1px solid #202738; border-radius: var(--dj-radius-md); padding: 18px 24px; margin-bottom: 28px; display: flex; align-items: center; gap: 16px;">
+    <span style="font-size: 24px;">⚖️</span>
+    <div style="font-size: 13px; color: var(--dj-text-secondary); line-height: 1.6;">
+      <strong>কপিরাইট ও বিতরণ সুরক্ষা নীতিমালা:</strong> অত্র সেকশনের সকল আন্তর্জাতিক প্রামাণ্যচিত্র বিবিসি ও আল জাজিরার অফিশিয়াল উন্মুক্ত লিঙ্ক এবং অনুমোদিত আইফ্রেম এমবেড মেকানিজমের মাধ্যমে উপস্থাপিত। দৈনিক জাহান কোনো কপিরাইটযুক্ত তৃতীয়-পক্ষের কন্টেন্ট ডাউনলোড, রি-হোস্ট বা অননুমোদিতভাবে পুনর্সম্প্রচার করে না।
+    </div>
+  </div>
+
+  <div class="dj-doc-grid">
+    {% for doc in documentaries %}
+    <article class="dj-doc-card">
+      <div class="dj-doc-thumb">
+        <video muted playsinline loop style="width: 100%; height: 100%; object-fit: cover;">
+          <source src="{{ doc.fallback_video }}" type="video/mp4">
+        </video>
+        <div class="dj-doc-thumb-overlay">
+          <span class="dj-doc-badge-source">{{ doc.broadcaster }}</span>
+          <span class="dj-doc-duration">⏱ {{ doc.duration }}</span>
+        </div>
+      </div>
+      <div class="dj-doc-body">
+        <span class="dj-doc-broadcaster">{{ doc.sub_category }} • {{ doc.year }}</span>
+        <h2 class="dj-doc-title">{{ doc.title_bn }}</h2>
+        <div style="font-size: 12px; color: var(--dj-text-muted); font-family: var(--dj-font-sans); margin-bottom: 8px;">
+          {{ doc.title_en }}
+        </div>
+        <p class="dj-doc-synopsis">{{ doc.synopsis_bn }}</p>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;">
+          {% for tag in doc.tags %}
+          <span style="font-size: 10px; background: #1C2230; padding: 2px 8px; border-radius: 4px; color: #94A3B8;">#{{ tag }}</span>
+          {% endfor %}
+        </div>
+
+        <div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--dj-border); padding-top: 12px;">
+          <a href="/?doc={{ doc.id }}#player-section" class="dj-btn-primary" style="font-size: 13px; padding: 8px 14px;">
+            ▶ প্লেয়ারে প্রামাণ্যচিত্রটি দেখুন
+          </a>
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+            <span style="color: var(--dj-text-muted);">উৎস: {{ doc.source_type }}</span>
+            <a href="{{ doc.official_url }}" target="_blank" rel="noopener noreferrer" style="color: var(--dj-gold); text-decoration: underline;">
+              অফিশিয়াল মূল লিঙ্ক ↗
+            </a>
+          </div>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
