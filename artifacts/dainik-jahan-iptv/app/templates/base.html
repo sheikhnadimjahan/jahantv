@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Tiro+Bangla:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
   <!-- Core Broadcast Stylesheet -->
-  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="/static/css/styles.css?v=2.1.1">
 
   <!-- Hls.js Library (Standalone embed fallback) -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -187,10 +187,32 @@
 
   <!-- Global JavaScript Modules -->
   <script src="/static/js/user.js"></script>
-  <script src="/static/js/player.js"></script>
+  <script src="/static/js/player.js?v=2.1.1"></script>
   <script src="/static/js/app.js"></script>
 
   <script>
+    window.djReportCommunityVideo = async function(button) {
+      const submissionId = button.dataset.communityId;
+      button.disabled = true;
+      try {
+        const response = await fetch(`/iptv-api/community/${encodeURIComponent(submissionId)}/report`, {
+          method: 'POST'
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'Report could not be submitted.');
+        if (data.status === 'hidden') {
+          button.closest('.dj-doc-card')?.remove();
+          window.djShowToast('This community video was automatically hidden after a report.');
+        } else {
+          window.djShowToast('Thank you. Your report was recorded.');
+        }
+      } catch (error) {
+        window.djShowToast(error.message || 'Report could not be submitted.');
+      } finally {
+        button.disabled = false;
+      }
+    };
+
     // Live Clock Updater
     function updateClock() {
       const el = document.getElementById('liveClock');

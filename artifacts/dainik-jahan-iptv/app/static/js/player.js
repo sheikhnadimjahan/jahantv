@@ -10,6 +10,10 @@ class DainikJahanPlayer {
     this.videoElement = document.getElementById(options.videoId || 'djVideoElement');
     this.iframeElement = document.getElementById(options.iframeId || 'djIframeElement');
     this.metaContainer = document.getElementById(options.metaId || 'djPlayerMeta');
+    this.unavailableElement = document.getElementById('djPlayerUnavailable');
+    this.unavailableTitle = document.getElementById('djPlayerUnavailableTitle');
+    this.unavailableMessage = document.getElementById('djPlayerUnavailableMessage');
+    this.unavailableLink = document.getElementById('djPlayerUnavailableLink');
     this.diagnosticsBox = document.getElementById('djDiagnosticsHud');
     this.currentChannel = null;
     this.hlsInstance = null;
@@ -17,6 +21,7 @@ class DainikJahanPlayer {
     this.isMuted = false;
     this.statsTimer = null;
     this.fallbackAttempted = false;
+    this.activeSource = '';
     
     this.initControls();
   }
@@ -73,6 +78,7 @@ class DainikJahanPlayer {
     if (!channelData) return;
     this.currentChannel = channelData;
     this.fallbackAttempted = false;
+    this.activeSource = '';
     console.log(`[DJ-IPTV] Loading Channel: ${channelData.name} (${channelData.id})`);
 
     // Step 1: Validation
@@ -80,13 +86,19 @@ class DainikJahanPlayer {
     this.updateMeta(channelData);
 
     // Step 2: Health Check & Routing
-    const source = channelData.primary_source || channelData.secondary_source || channelData.fallback_source;
+    const sources = [
+      channelData.primary_source,
+      channelData.secondary_source,
+      channelData.fallback_source
+    ].filter(source => this.isPlayableSource(source));
+    const source = sources[0];
     if (!source) {
-      this.reportStatus('offline', 'অনুমোদিত স্ট্রিম ঠিকানা পাওয়া যায়নি');
-      if (window.djShowToast) window.djShowToast('এই চ্যানেলের জন্য কোনো স্ট্রিম ঠিকানা দেওয়া নেই');
+      this.showUnavailable(channelData);
       return;
     }
-    const isEmbed = channelData.stream_type === 'embed' || (source && source.includes('youtube'));
+    this.hideUnavailable();
+    this.activeSource = source;
+    const isEmbed = this.isEmbedSource(source);
 
     if (isEmbed) {
       this.playEmbed(source);
@@ -106,7 +118,77 @@ class DainikJahanPlayer {
     this.startDiagnosticsHUD();
   }
 
+  isPlaceholderSource(source) {
+    return typeof source === 'string' && source.includes('/static/images/sample_media/');
+  }
+
+  isEmbedSource(source) {
+    try {
+      const hostname = new URL(source, window.location.origin).hostname.toLowerCase();
+      return hostname === 'youtube.com'
+        || hostname.endsWith('.youtube.com')
+        || hostname === 'youtube-nocookie.com'
+        || hostname.endsWith('.youtube-nocookie.com')
+        || hostname === 'player.vimeo.com';
+    } catch {
+      return false;
+    }
+  }
+
+  isPlayableSource(source) {
+    if (typeof source !== 'string' || !source.trim() || this.isPlaceholderSource(source)) {
+      return false;
+    }
+    if (this.isEmbedSource(source)) return true;
+    return /\.(m3u8|mp4|m4v|webm|ogg)(?:$|[?#])/i.test(source);
+  }
+
+  hideUnavailable() {
+    if (this.unavailableElement) this.unavailableElement.style.display = 'none';
+  }
+
+  showUnavailable(channel, message = 'No playable authorized stream is configured for this channel.') {
+    if (this.videoElement) {
+      this.videoElement.pause();
+      this.videoElement.removeAttribute('src');
+      this.videoElement.load();
+      this.videoElement.style.display = 'none';
+    }
+    if (this.iframeElement) {
+      this.iframeElement.src = '';
+      this.iframeElement.style.display = 'none';
+    }
+    if (this.unavailableTitle) {
+      this.unavailableTitle.textContent = channel.name_en || channel.name || 'Stream unavailable';
+    }
+    if (this.unavailableMessage) this.unavailableMessage.textContent = message;
+
+    const externalPage = [channel.secondary_source, channel.official_url]
+      .find(url => {
+        if (typeof url !== 'string') return false;
+        try {
+          return new URL(url).protocol === 'https:';
+        } catch {
+          return false;
+        }
+      });
+    if (this.unavailableLink) {
+      if (externalPage) {
+        this.unavailableLink.href = externalPage;
+        this.unavailableLink.style.display = 'inline-flex';
+      } else {
+        this.unavailableLink.removeAttribute('href');
+        this.unavailableLink.style.display = 'none';
+      }
+    }
+    if (this.unavailableElement) this.unavailableElement.style.display = 'flex';
+    this.reportStatus('offline', 'লাইভ স্ট্রিম এখন উপলভ্য নয়');
+    this.updatePlayBtn(false);
+  }
+
   playDirect(streamUrl) {
+    this.hideUnavailable();
+    this.activeSource = streamUrl;
     if (this.iframeElement) {
       this.iframeElement.style.display = 'none';
       this.iframeElement.src = '';
@@ -148,31 +230,37 @@ class DainikJahanPlayer {
   }
 
   playEmbed(embedUrl) {
+    if (!this.isEmbedSource(embedUrl)) {
+      this.showUnavailable(this.currentChannel, 'The broadcaster embed URL is not supported.');
+      return;
+    }
+    this.hideUnavailable();
+    this.activeSource = embedUrl;
     if (this.videoElement) {
       this.videoElement.pause();
+      this.videoElement.removeAttribute('src');
       this.videoElement.style.display = 'none';
     }
     if (this.iframeElement) {
       this.iframeElement.style.display = 'block';
-      // Append autoplay if needed
-      let finalUrl = embedUrl;
-      if (!finalUrl.includes('autoplay=')) {
-        finalUrl += (finalUrl.includes('?') ? '&' : '?') + 'autoplay=1&mute=0&rel=0&modestbranding=1';
-      }
-      this.iframeElement.src = finalUrl;
+      const separator = embedUrl.includes('?') ? '&' : '?';
+      this.iframeElement.src = `${embedUrl}${separator}autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1`;
       this.reportStatus('live', 'অনুমোদিত এমবেড সম্প্রচার (Live Embed)');
     }
   }
 
   triggerFallback() {
     if (!this.currentChannel) return;
-    if (this.fallbackAttempted) {
-      this.reportStatus('offline', 'বর্তমানে সিগন্যাল পাওয়া যাচ্ছে না');
-      this.updatePlayBtn(false);
+    const fallback = this.currentChannel.fallback_source;
+    if (
+      this.fallbackAttempted
+      || !this.isPlayableSource(fallback)
+      || fallback === this.activeSource
+    ) {
+      this.showUnavailable(this.currentChannel);
       return;
     }
     this.fallbackAttempted = true;
-    const fallback = this.currentChannel.fallback_source || '/static/images/sample_media/dainik_jahan_live.mp4';
     console.log('[DJ-IPTV] Switching to authorized fallback:', fallback);
     this.reportStatus('fallback', 'বিকল্প ব্যাকআপ সিগন্যাল সক্রিয়');
     if (this.iframeElement) {

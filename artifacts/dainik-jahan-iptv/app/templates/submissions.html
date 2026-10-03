@@ -23,6 +23,12 @@
       দৈনিক জাহান আইপিটিভি প্ল্যাটফর্মে যেকোনো ধরনের কপিরাইট লঙ্ঘন, পাইরেসি, অননুমোদিত রি-ট্রান্সমিশন, প্রতারণা, স্ক্যাম, ফিশিং, ম্যালওয়্যার, সন্ত্রাসবাদী বা উগ্রপন্থী প্রচার, সহিংসতায় প্ররোচনা, শিশু নির্যাতন/শোষণ, অবমাননাকর বা গোপনীয় সামগ্রী প্রকাশ, হুমকি, ডক্সিং এবং দেশের প্রচলিত আইন দ্বারা নিষিদ্ধ যেকোনো বিষয়বস্তু <strong>কঠোরভাবে নিষিদ্ধ</strong>। লঙ্ঘনকারীদের বিরুদ্ধে তাৎক্ষণিক আইনি ব্যবস্থা গ্রহণ করা হবে।
     </p>
   </div>
+  <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: var(--dj-radius-md); padding: 16px 20px; margin-bottom: 24px;">
+    <h3 style="color: #34d399; font-size: 14px; margin: 0 0 6px;">Automatic publishing rules</h3>
+    <p style="font-size: 13px; color: var(--dj-text-secondary); line-height: 1.6; margin: 0;">
+      Documentary submissions are published automatically only when the link is a valid HTTPS YouTube video URL, a country is provided, and rights are confirmed. These checks do not determine whether a video complies with every country’s laws or inspect the video itself. Public reports can automatically hide a community submission.
+    </p>
+  </div>
 
   <div class="dj-form-card">
     <form id="submissionForm">
@@ -67,8 +73,23 @@
       </div>
 
       <div class="dj-form-group">
-        <label class="dj-label">অনুমোদিত স্ট্রিম বা সোর্স ইউআরএল (Stream/Media URL - If applicable)</label>
-        <input type="url" id="subUrl" class="dj-input" placeholder="https://your-station.org/live.m3u8 বা অফিশিয়াল সাইট">
+        <label class="dj-label">YouTube video link (required for documentary submissions)</label>
+        <input type="url" id="subUrl" class="dj-input" placeholder="https://www.youtube.com/watch?v=..." >
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="dj-form-group">
+          <label class="dj-label" for="subCountry">Country or legal jurisdiction *</label>
+          <input type="text" id="subCountry" class="dj-input" maxlength="80" placeholder="e.g. Bangladesh" required>
+        </div>
+        <div class="dj-form-group">
+          <label class="dj-label" for="subLanguage">Content language</label>
+          <select id="subLanguage" class="dj-select">
+            <option value="English">English</option>
+            <option value="Bengali">বাংলা (Bengali)</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
       </div>
 
       <div class="dj-form-group">
@@ -79,7 +100,7 @@
       <div class="dj-checkbox-wrap">
         <input type="checkbox" id="subTerms" required>
         <label for="subTerms">
-          আমি নিশ্চিত করছি যে প্রস্তাবিত কনটেন্ট বা তথ্যের আইনগত বৈধ অধিকার আমার/আমাদের রয়েছে। এটি কোনো কপিরাইট, পাইরেসি বা বাংলাদেশের প্রচলিত আইন লঙ্ঘন করে না এবং আমি দৈনিক জাহান আইপিটিভির সম্প্রচার নীতিমালা মেনে চলতে সম্মত।
+          I confirm I have the necessary rights or authorization for this content, and that it complies with the laws applicable to the country I provided. I understand that an automated link check is not a legal review and does not guarantee compliance in every jurisdiction.
         </label>
       </div>
 
@@ -95,9 +116,7 @@
       <p style="font-size: 14px; color: #fff; margin-bottom: 8px;">
         আপনার ট্র্যাকিং রেফারেন্স আইডি: <strong id="trackingRef" style="color: var(--dj-gold); font-family: var(--dj-font-mono);">DJ-202609-000000</strong>
       </p>
-      <p style="font-size: 13px; color: var(--dj-text-muted);">
-        দৈনিক জাহান সম্প্রচার ও সম্পাদনা পরিষদ আপনার প্রস্তাবনা পর্যালোচনা করে পরবর্তী ৪৮ ঘণ্টার মধ্যে ইমেইলে যোগাযোগ করবে।
-      </p>
+      <p id="submissionStatusText" style="font-size: 13px; color: var(--dj-text-muted);"></p>
     </div>
 
   </div>
@@ -140,7 +159,10 @@
         organization: document.getElementById('subOrg').value,
         title: document.getElementById('subTitle').value,
         details: document.getElementById('subDetails').value,
-        source_url: document.getElementById('subUrl').value
+        source_url: document.getElementById('subUrl').value,
+        country: document.getElementById('subCountry').value,
+        content_language: document.getElementById('subLanguage').value,
+        rights_confirmed: document.getElementById('subTerms').checked
       };
 
       try {
@@ -156,6 +178,7 @@
         }
         form.style.display = 'none';
         document.getElementById('trackingRef').textContent = data.tracking_id;
+        document.getElementById('submissionStatusText').textContent = data.message;
         document.getElementById('subSuccessBox').style.display = 'block';
         window.djShowToast('আবেদন সফলভাবে সাবমিট হয়েছে!');
       } catch (err) {

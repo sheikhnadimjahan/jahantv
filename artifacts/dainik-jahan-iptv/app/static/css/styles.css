@@ -315,6 +315,55 @@ button {
   height: 100%;
   border: none;
 }
+.dj-player-unavailable {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  color: #f8fafc;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(160, 24, 39, 0.24), transparent 38%),
+    linear-gradient(145deg, #11131a, #08090d 72%);
+}
+.dj-player-unavailable-icon {
+  font-size: 34px;
+  line-height: 1;
+}
+.dj-player-unavailable h2 {
+  margin: 0;
+  font-size: clamp(18px, 2.4vw, 25px);
+}
+.dj-player-unavailable p {
+  max-width: 460px;
+  margin: 0;
+  color: #a8afbd;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.dj-player-unavailable-link,
+.dj-player-unavailable-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+.dj-player-unavailable-submit {
+  border-color: rgba(255, 70, 87, 0.55);
+  background: rgba(158, 26, 34, 0.6);
+}
 
 /* Watermark Badge */
 .dj-player-watermark {

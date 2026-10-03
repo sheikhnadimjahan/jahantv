@@ -24,9 +24,36 @@ def init_db():
             title TEXT NOT NULL,
             details TEXT NOT NULL,
             source_url TEXT,
+            country TEXT DEFAULT '',
+            content_language TEXT DEFAULT 'English',
+            rights_confirmed INTEGER DEFAULT 0,
+            moderation_note TEXT DEFAULT '',
             copyright_declaration INTEGER DEFAULT 1,
             status TEXT DEFAULT 'pending',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+
+    submission_columns = {
+        row[1] for row in cursor.execute("PRAGMA table_info(submissions)").fetchall()
+    }
+    for column_name, column_definition in (
+        ("country", "TEXT DEFAULT ''"),
+        ("content_language", "TEXT DEFAULT 'English'"),
+        ("rights_confirmed", "INTEGER DEFAULT 0"),
+        ("moderation_note", "TEXT DEFAULT ''"),
+    ):
+        if column_name not in submission_columns:
+            cursor.execute(
+                f"ALTER TABLE submissions ADD COLUMN {column_name} {column_definition}"
+            )
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS submission_reports (
+            submission_id TEXT NOT NULL,
+            reporter_fingerprint TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (submission_id, reporter_fingerprint)
         )
     ''')
     
@@ -60,14 +87,48 @@ def init_db():
     conn.commit()
     conn.close()
 
-def save_submission(sub_type, name, email, phone, organization, title, details, source_url):
+def save_submission(
+    sub_type,
+    name,
+    email,
+    phone,
+    organization,
+    title,
+    details,
+    source_url,
+    country="",
+    content_language="English",
+    rights_confirmed=False,
+    moderation_note="",
+    status="pending",
+):
     sub_id = f"DJ-{datetime.now().strftime('%Y%m')}-{uuid.uuid4().hex[:6].upper()}"
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO submissions (id, type, name, email, phone, organization, title, details, source_url)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (sub_id, sub_type, name, email, phone, organization, title, details, source_url))
+        INSERT INTO submissions (
+            id, type, name, email, phone, organization, title, details, source_url,
+            country, content_language, rights_confirmed, moderation_note,
+            copyright_declaration, status
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (
+        sub_id,
+        sub_type,
+        name,
+        email,
+        phone,
+        organization,
+        title,
+        details,
+        source_url,
+        country,
+        content_language,
+        int(bool(rights_confirmed)),
+        moderation_note,
+        int(bool(rights_confirmed)),
+        status,
+    ))
     conn.commit()
     conn.close()
     return sub_id
@@ -80,6 +141,51 @@ def get_submissions(limit=50):
     rows = [dict(r) for r in cursor.fetchall()]
     conn.close()
     return rows
+
+def get_published_video_submissions(limit=100):
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM submissions WHERE type = 'documentary_submission' "
+        "AND status = 'published' ORDER BY created_at DESC LIMIT ?",
+        (limit,),
+    )
+    rows = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return rows
+
+def report_submission(submission_id, reporter_fingerprint, hide_threshold=1):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT id FROM submissions WHERE id = ? AND type = 'documentary_submission' "
+        "AND status = 'published'",
+        (submission_id,),
+    )
+    if cursor.fetchone() is None:
+        conn.close()
+        return None
+
+    cursor.execute(
+        "INSERT OR IGNORE INTO submission_reports (submission_id, reporter_fingerprint) "
+        "VALUES (?, ?)",
+        (submission_id, reporter_fingerprint),
+    )
+    cursor.execute(
+        "SELECT COUNT(*) FROM submission_reports WHERE submission_id = ?",
+        (submission_id,),
+    )
+    report_count = cursor.fetchone()[0]
+    is_hidden = report_count >= hide_threshold
+    if is_hidden:
+        cursor.execute(
+            "UPDATE submissions SET status = 'hidden' WHERE id = ?",
+            (submission_id,),
+        )
+    conn.commit()
+    conn.close()
+    return {"report_count": report_count, "hidden": is_hidden}
 
 def save_node_registration(name, operator, endpoint_url, region, channels_count):
     node_id = f"NODE-{uuid.uuid4().hex[:8].upper()}"

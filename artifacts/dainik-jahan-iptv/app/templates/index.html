@@ -10,8 +10,8 @@
   <div class="dj-player-viewport">
     
     <!-- Status Badge (Live / Degraded / Fallback) -->
-    <div id="djPlayerStatusBadge" class="dj-player-status-badge dj-status-live">
-      সরাসরি সম্প্রচারিত (Live)
+    <div id="djPlayerStatusBadge" class="dj-player-status-badge dj-status-offline">
+      সিগন্যাল উপলভ্য নয়
     </div>
 
     <!-- Official Dainik Jahan Watermark -->
@@ -22,23 +22,31 @@
 
     <!-- Video Canvas Wrapper -->
     <div class="dj-video-wrapper">
-      <video id="djVideoElement" class="dj-video-element" playsinline autoplay controlslist="nodownload">
-        <source src="{{ default_channel.primary_source }}" type="video/mp4">
+      <video id="djVideoElement" class="dj-video-element" playsinline controlslist="nodownload">
         আপনার ব্রাউজারটি এইচটিএমএল৫ ভিডিও সমর্থন করে না।
       </video>
-      <iframe id="djIframeElement" class="dj-iframe-element" style="display: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe id="djIframeElement" class="dj-iframe-element" title="Official broadcaster stream" style="display: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <div id="djPlayerUnavailable" class="dj-player-unavailable" role="status" style="display: none;">
+        <div class="dj-player-unavailable-icon" aria-hidden="true">📡</div>
+        <h2 id="djPlayerUnavailableTitle">Live stream unavailable</h2>
+        <p id="djPlayerUnavailableMessage">No playable authorized stream is configured for this channel.</p>
+        <a id="djPlayerUnavailableLink" class="dj-player-unavailable-link" href="#" target="_blank" rel="noopener noreferrer" style="display: none;">
+          Open broadcaster’s official page
+        </a>
+        <a class="dj-player-unavailable-submit" href="/submissions?type=channel">Submit an authorized stream</a>
+      </div>
     </div>
 
     <!-- Diagnostics HUD -->
     <div id="djDiagnosticsHud" class="dj-diagnostics-box">
-      <div class="dj-diag-item">প্রোটোকল: <span id="hudProtocol">HLS / TLS Edge</span></div>
-      <div class="dj-diag-item">রিলে নোড: <span id="hudNode">{{ default_channel.federation_node }}</span></div>
+      <div class="dj-diag-item">প্রোটোকল: <span id="hudProtocol">Not verified</span></div>
+      <div class="dj-diag-item">রিলে নোড: <span id="hudNode">Source information unavailable</span></div>
       <div class="dj-diag-item">রেজোলিউশন: <span id="hudRes">{{ default_channel.resolution }}</span></div>
-      <div class="dj-diag-item">লেটেন্সি: <span id="hudLatency">1.2s (Ultra Low)</span></div>
-      <div class="dj-diag-item">বিটরেট: <span id="hudBitrate">{{ default_channel.bitrate }}</span></div>
-      <div class="dj-diag-item">অডিও চ্যানেল: <span id="hudAudio">Stereo AAC 48kHz</span></div>
-      <div class="dj-diag-item">সিগন্যাল হেলথ: <span style="color: #10B981;">১০০% অপটিমাল</span></div>
-      <div class="dj-diag-item">কপিরাইট স্ট্যাটাস: <span style="color: #3B82F6;">অনুমোদিত সিগন্যাল</span></div>
+      <div class="dj-diag-item">লেটেন্সি: <span id="hudLatency">Not measured</span></div>
+      <div class="dj-diag-item">বিটরেট: <span id="hudBitrate">Source information unavailable</span></div>
+      <div class="dj-diag-item">অডিও চ্যানেল: <span id="hudAudio">Source information unavailable</span></div>
+      <div class="dj-diag-item">সিগন্যাল হেলথ: <span style="color: var(--dj-text-muted);">Not measured</span></div>
+      <div class="dj-diag-item">কপিরাইট স্ট্যাটাস: <span style="color: var(--dj-text-muted);">Not independently verified</span></div>
     </div>
 
     <!-- Controls Bar -->
@@ -115,7 +123,7 @@
             {{ ch.category_bn }} • {{ ch.resolution }}
           </div>
         </div>
-        <span class="pulse-dot" style="margin-left: auto;"></span>
+        <span class="pulse-dot" aria-label="{{ 'Source configured; not live-checked' if ch.source_configured else 'Stream unavailable' }}" style="margin-left: auto; animation: none; background: {{ '#F59E0B' if ch.source_configured else '#6B7280' }}; box-shadow: none;"></span>
       </div>
       {% endfor %}
     </div>
@@ -153,8 +161,8 @@
     <div class="dj-section-title-wrap">
       <div class="dj-section-icon">📺</div>
       <div>
-        <h2 class="dj-section-title">অনুমোদিত লাইভ চ্যানেল সমূহ</h2>
-        <p class="dj-section-subtitle">সকল সক্রিয় চ্যানেল সম্পূর্ণ বৈধ, অনুমোদিত এবং কপিরাইট সংরক্ষিত</p>
+        <h2 class="dj-section-title">চ্যানেল ডিরেক্টরি</h2>
+        <p class="dj-section-subtitle">উৎসের প্রাপ্যতা সম্প্রচারকারী ও অঞ্চলের ওপর নির্ভরশীল; লাইভ সংযোগ বা অধিকার স্বাধীনভাবে যাচাই করা হয় না।</p>
       </div>
     </div>
     <a href="/discovery" class="dj-section-link">সবগুলো দেখুন →</a>
@@ -178,7 +186,9 @@
           <span>{{ ch.callsign }}</span>
           {% endif %}
         </div>
-        <span class="dj-card-status-badge dj-card-status-live">সরাসরি সম্প্রচার</span>
+        <span class="dj-card-status-badge" style="background: rgba(0,0,0,.45); color: var(--dj-text-secondary); border: 1px solid var(--dj-border);">
+          {% if ch.source_configured %}Source configured — not live-checked{% else %}Stream unavailable{% endif %}
+        </span>
       </div>
 
       <div class="dj-card-body">
@@ -226,12 +236,19 @@
     {% for doc in documentaries[:4] %}
     <article class="dj-doc-card" data-search-card>
       <div class="dj-doc-thumb">
-        <video muted playsinline loop style="width: 100%; height: 100%; object-fit: cover;">
-          <source src="{{ doc.fallback_video }}" type="video/mp4">
-        </video>
+        {% if doc.thumbnail and doc.thumbnail.startswith('https://') %}
+        <img src="{{ doc.thumbnail }}" alt="{{ doc.title_en }}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="width: 100%; height: 100%; object-fit: cover;">
+        {% else %}
+        <div aria-hidden="true" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 16px; text-align: center; color: var(--dj-text-muted); background: linear-gradient(145deg, #141821, #080A0E); font-weight: 700;">
+          {{ doc.broadcaster }}
+        </div>
+        {% endif %}
         <div class="dj-doc-thumb-overlay">
           <span class="dj-doc-badge-source">{{ doc.broadcaster }}</span>
-          <span class="dj-doc-duration">⏱ {{ doc.duration }}</span>
+          {% if doc.duration %}<span class="dj-doc-duration">⏱ {{ doc.duration }}</span>{% endif %}
+          {% if doc.is_community %}
+          <button type="button" data-community-id="{{ doc.id }}" onclick="djReportCommunityVideo(this)" style="align-self: flex-end; padding: 5px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,.35); background: rgba(0,0,0,.72); color: #fff; cursor: pointer; font-size: 11px;">Report</button>
+          {% endif %}
         </div>
       </div>
       <div class="dj-doc-body">
@@ -239,7 +256,7 @@
         <h3 class="dj-doc-title">{{ doc.title_bn }}</h3>
         <p class="dj-doc-synopsis">{{ doc.synopsis_bn }}</p>
         <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--dj-border); padding-top: 10px;">
-          <button class="dj-card-play-btn" onclick="playDocInMain('{{ doc.title_bn }}', '{{ doc.embed_url }}', '{{ doc.fallback_video }}', '{{ doc.broadcaster }}', '{{ doc.id }}')">
+          <button class="dj-card-play-btn" data-doc-title="{{ doc.title_bn }}" data-doc-embed-url="{{ doc.embed_url }}" data-doc-fallback-url="{{ doc.fallback_video }}" data-doc-broadcaster="{{ doc.broadcaster }}" data-doc-id="{{ doc.id }}" onclick="djPlayDocumentaryCard(this)">
             ▶ প্রামাণ্যচিত্র দেখুন
           </button>
           <a href="{{ doc.official_url }}" target="_blank" rel="noopener noreferrer" style="font-size: 12px; color: var(--dj-gold); text-decoration: underline;">
@@ -342,8 +359,8 @@
         category: 'Documentary',
         category_bn: 'প্রামাণ্যচিত্র',
         authorized_by: broadcaster,
-        resolution: '1080p HD',
-        bitrate: '4500 kbps',
+         resolution: 'Source quality',
+         bitrate: 'Source-provided',
         primary_source: embedUrl || fallbackUrl,
         secondary_source: fallbackUrl,
         fallback_source: fallbackUrl,
@@ -355,6 +372,16 @@
       window.djShowToast('প্রামাণ্যচিত্র চালু হয়েছে');
     };
 
+    window.djPlayDocumentaryCard = function(button) {
+      window.playDocInMain(
+        button.dataset.docTitle,
+        button.dataset.docEmbedUrl,
+        button.dataset.docFallbackUrl,
+        button.dataset.docBroadcaster,
+        button.dataset.docId
+      );
+    };
+
     window.playVideoBulletin = function(title, videoUrl, articleId) {
       const newsChannel = {
         id: articleId,
@@ -363,8 +390,8 @@
         category: 'News',
         category_bn: 'ভিডিও সংবাদ',
         authorized_by: 'Dainik Jahan Newsdesk',
-        resolution: '1080p HD',
-        bitrate: '3800 kbps',
+         resolution: 'Source quality',
+         bitrate: 'Source-provided',
         primary_source: videoUrl,
         fallback_source: videoUrl,
         stream_type: 'video',

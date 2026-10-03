@@ -1,0 +1,1 @@
+- [IPTV editorial and automation rules](iptv-editorial-automation.md) — deterministic checks, automatic holds, English-first UI, and original broadcaster assets.
