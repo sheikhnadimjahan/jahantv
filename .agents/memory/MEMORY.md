@@ -1,1 +1,1 @@
-- [IPTV editorial and automation rules](iptv-editorial-automation.md) — deterministic checks, automatic holds, English-first UI, and original broadcaster assets.
+- [IPTV editorial and automation rules](iptv-editorial-automation.md) — no-login Android APK, English-first UI, automated holds, and original broadcaster assets.
