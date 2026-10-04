@@ -21,7 +21,7 @@ timeoutMs = 20000
 
 [nix]
 channel = "stable-25_05"
-packages = ["libxcrypt"]
+packages = ["freetype", "gumbo", "harfbuzz", "jbig2dec", "libjpeg_turbo", "libxcrypt", "mupdf", "openjpeg", "swig", "xcbuild"]
 
 [objectStorage]
 defaultBucketID = "replit-objstore-92933ff3-ddc5-49fd-8776-bcf0c1200ce7"
