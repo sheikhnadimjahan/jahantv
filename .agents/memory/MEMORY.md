@@ -1,1 +1,1 @@
-- [IPTV editorial and automation rules](iptv-editorial-automation.md) — no-login Android APK, English-first UI, automated holds, and original broadcaster assets.
+- [IPTV editorial and automation rules](iptv-editorial-automation.md) — no-login APK, IPTV PDF as reference only, English-first UI, automated holds, and original assets.
